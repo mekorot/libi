@@ -502,3 +502,67 @@ hr.divider {
 .alert-badge.warning  { background: #FEF3C7; color: #92400E; }
 .alert-badge.ok       { background: var(--tag-done-bg); color: var(--tag-done-text); }
 
+/* ── Loading state (while fetching flow.json) ── */
+.flow-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  height: 100%;
+  min-height: 200px;
+  color: var(--text-tertiary);
+  font-size: 14px;
+}
+
+.flow-loading-spinner {
+  width: 32px; height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--mekorot-blue);
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Error state (if flow.json fails to load) ── */
+.flow-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 100%;
+  min-height: 200px;
+  color: var(--danger);
+  font-size: 14px;
+  text-align: center;
+  padding: 24px;
+}
+
+.flow-error svg { opacity: 0.7; }
+
+.flow-error p {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.flow-error code {
+  font-size: 11px;
+  color: var(--danger);
+  background: #FEE2E2;
+  border-color: rgba(220,38,38,0.2);
+  word-break: break-all;
+  max-width: 360px;
+  display: block;
+  padding: 6px 10px;
+}
+
+.flow-error .restart-btn {
+  margin-top: 6px;
+  color: var(--mekorot-blue);
+  border-color: var(--mekorot-blue);
+}
+.flow-error .restart-btn:hover { background: var(--mekorot-blue-light); }

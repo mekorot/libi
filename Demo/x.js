@@ -253,54 +253,22 @@ async function runFlow() {
 }
 
 /* ─────────────────────────────────────────────
-   Idle state  — shown before the flow starts
-───────────────────────────────────────────── */
-function showIdleState() {
-    document.getElementById('messages').innerHTML = `
-      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;
-                  height:100%;min-height:320px;gap:14px;padding:48px 24px;text-align:center">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-             stroke-linecap="round" stroke-linejoin="round" width="44" height="44"
-             style="color:var(--mekorot-blue);opacity:0.35">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-        </svg>
-        <p style="font-size:15px;font-weight:500;color:var(--text-secondary)">
-          שלח הודעה כדי להתחיל את השיחה
-        </p>
-        <p style="font-size:12px;color:var(--text-tertiary)">
-          ליבי מוכנה לסייע לך בביצוע ביקורת הפנים
-        </p>
-      </div>`;
-}
-
-/* ─────────────────────────────────────────────
    Live input (non-scripted)
 ───────────────────────────────────────────── */
 function handleKey(e) {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 }
 
-let flowStarted = false;
-
 function sendMessage() {
     const inp = document.getElementById('chatInput');
     const val = inp.value.trim();
     if (!val) return;
-    inp.value = '';
-
-    // First message — kick off the scripted flow
-    if (!flowStarted) {
-        flowStarted = true;
-        runFlow();
-        return;
-    }
-
-    // Subsequent messages — live (non-scripted) behaviour
     playUserMessage({ text: val });
+    inp.value = '';
     setTimeout(() => { showTyping(); setTimeout(removeTyping, 2200); }, 400);
 }
 
 /* ─────────────────────────────────────────────
-   Boot  — show idle state, wait for user input
+   Boot
 ───────────────────────────────────────────── */
-showIdleState();
+runFlow();
