@@ -355,7 +355,7 @@ function handleKey(e) {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 }
 
-function sendMessage() {
+async function sendMessage() {
     const inp = document.getElementById('chatInput');
     const val = inp.value.trim();
     if (!val) return;
@@ -376,13 +376,13 @@ function sendMessage() {
 
     // ── Gate 2: paused at mid-flow confirmation ──
     if (waitingForUser) {
-      if (val === CONFIRM_PHRASE) {
-        waitingForUser = false;
-        await playUserMessage({ text: val });
-        playSteps(remainingSteps);
-      } else {
-        playUserMessage({ text: val });
-        setTimeout(() => showNudge(CONFIRM_PHRASE), 400);
+        if (val === CONFIRM_PHRASE) {
+            waitingForUser = false;
+            await playUserMessage({ text: val });
+            await playSteps(remainingSteps);
+        } else {
+            playUserMessage({ text: val });
+            setTimeout(() => showNudge(CONFIRM_PHRASE), 400);
         }
         return;
     }
