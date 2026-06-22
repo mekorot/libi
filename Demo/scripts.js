@@ -114,55 +114,6 @@ function showErrorState(err) {
 }
 
 /* ─────────────────────────────────────────────
-   Phrase-gate hint helpers
-───────────────────────────────────────────── */
-function phraseHintHTML(phrase, hintId) {
-    return `
-      <div id="${hintId}" style="text-align:center;padding:18px 24px 6px;">
-        <div style="display:inline-flex;align-items:center;gap:8px;
-                    background:#FFF8E1;border:1px solid #F59E0B;border-radius:10px;
-                    padding:10px 18px;font-size:13px;color:#7C4A00;direction:rtl">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
-          כדי להמשיך יש לכתוב בדיוק:&nbsp;
-          <strong style="color:#5C3200">"${esc(phrase)}"</strong>
-        </div>
-      </div>`;
-}
-
-function showStartHint() {
-    removeStartHint();
-    const msgs = document.getElementById('messages');
-    const el = document.createElement('div');
-    el.innerHTML = phraseHintHTML(START_PHRASE, 'startHint');
-    msgs.appendChild(el.firstElementChild);
-    msgs.scrollTop = 99999;
-}
-
-function removeStartHint() {
-    const h = document.getElementById('startHint');
-    if (h) h.remove();
-}
-
-function showWaitingHint() {
-    removeWaitingHint();
-    const msgs = document.getElementById('messages');
-    const el = document.createElement('div');
-    el.innerHTML = phraseHintHTML(CONFIRM_PHRASE, 'waitHint');
-    msgs.appendChild(el.firstElementChild);
-    msgs.scrollTop = 99999;
-}
-
-function removeWaitingHint() {
-    const h = document.getElementById('waitHint');
-    if (h) h.remove();
-}
-
-/* ─────────────────────────────────────────────
    Libi nudge — shown when wrong phrase is typed
 ───────────────────────────────────────────── */
 async function showNudge(requiredPhrase) {
@@ -334,7 +285,6 @@ async function playSteps(steps) {
             remainingSteps = steps.slice(i);   // keep this step + everything after
             waitingForUser = true;
             running        = false;
-            showWaitingHint();
             return;                            // halt — resumed by sendMessage()
         }
 
@@ -392,19 +342,9 @@ function showIdleState() {
         <p style="font-size:15px;font-weight:500;color:var(--text-secondary)">
           ליבי מוכנה לסייע לך בביצוע ביקורת הפנים
         </p>
-        <div style="display:inline-flex;align-items:center;gap:8px;
-                    background:#FFF8E1;border:1px solid #F59E0B;border-radius:10px;
-                    padding:12px 20px;font-size:13px;color:#7C4A00;direction:rtl;max-width:520px">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="16" x2="12.01" y2="16"/>
-          </svg>
-          <span>כדי להתחיל יש לכתוב בדיוק:&nbsp;
-            <strong style="color:#5C3200">"${esc(START_PHRASE)}"</strong>
-          </span>
-        </div>
+        <p style="font-size:12px;color:var(--text-tertiary)">
+          שלח הודעה כדי להתחיל את השיחה
+        </p>
       </div>`;
 }
 
@@ -425,7 +365,6 @@ function sendMessage() {
     if (!flowStarted) {
         if (val === START_PHRASE) {
             flowStarted = true;
-            removeStartHint();
             runFlow();
         } else {
             // Show what the user typed, then a nudge from Libi
@@ -438,7 +377,6 @@ function sendMessage() {
     // ── Gate 2: paused at mid-flow confirmation ──
     if (waitingForUser) {
         if (val === CONFIRM_PHRASE) {
-            removeWaitingHint();
             waitingForUser = false;
             playSteps(remainingSteps);   // plays the scripted user step then continues
         } else {
@@ -457,3 +395,4 @@ function sendMessage() {
    Boot  — show idle state, wait for user input
 ───────────────────────────────────────────── */
 showIdleState();
+ 
