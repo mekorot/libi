@@ -267,9 +267,9 @@ async function playUserMessage(msg) {
    Flow state
 ───────────────────────────────────────────── */
 let running        = false;
-let flowStarted    = false;   // true once the flow has been kicked off
-let waitingForUser = false;   // true while paused at the mid-flow gate
-let remainingSteps = [];      // steps queued after the mid-flow gate
+let flowStarted    = false;  // true once the flow has been kicked off
+let waitingForUser = false;  // true while paused at the mid-flow gate
+let remainingSteps = [];     // steps queued after the mid-flow gate
 
 /* ─────────────────────────────────────────────
    Step player  — shared by runFlow + resume
@@ -282,10 +282,10 @@ async function playSteps(steps) {
 
         // ── GATE: pause before the scripted confirmation message ──
         if (step.type === 'user' && step.text === CONFIRM_PHRASE) {
-          remainingSteps = steps.slice(i + 1);   // skip the scripted user step
+            remainingSteps = steps.slice(i + 1);   // skip the scripted user step
             waitingForUser = true;
             running        = false;
-            return;                            // halt — resumed by sendMessage()
+            return;                                // halt — resumed by sendMessage()
         }
 
         if (step.type === 'user') await playUserMessage(step);
@@ -306,7 +306,7 @@ async function runFlow() {
     // Full reset
     waitingForUser = false;
     remainingSteps = [];
-    flowStarted    = false;
+    flowStarted    = true;   // FIX: was false — caused Gate 1 to re-trigger after Gate 2
 
     const msgs = document.getElementById('messages');
     msgs.innerHTML = '';
