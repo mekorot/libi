@@ -280,9 +280,9 @@ async function playSteps(steps) {
     for (let i = 0; i < steps.length; i++) {
         const step = steps[i];
 
-        // ── GATE: pause when we reach the scripted confirmation message ──
+        // ── GATE: pause before the scripted confirmation message ──
         if (step.type === 'user' && step.text === CONFIRM_PHRASE) {
-            remainingSteps = steps.slice(i);   // keep this step + everything after
+          remainingSteps = steps.slice(i + 1);   // skip the scripted user step
             waitingForUser = true;
             running        = false;
             return;                            // halt — resumed by sendMessage()
@@ -376,12 +376,13 @@ function sendMessage() {
 
     // ── Gate 2: paused at mid-flow confirmation ──
     if (waitingForUser) {
-        if (val === CONFIRM_PHRASE) {
-            waitingForUser = false;
-            playSteps(remainingSteps);   // plays the scripted user step then continues
-        } else {
-            playUserMessage({ text: val });
-            setTimeout(() => showNudge(CONFIRM_PHRASE), 400);
+      if (val === CONFIRM_PHRASE) {
+        waitingForUser = false;
+        await playUserMessage({ text: val });
+        playSteps(remainingSteps);
+      } else {
+        playUserMessage({ text: val });
+        setTimeout(() => showNudge(CONFIRM_PHRASE), 400);
         }
         return;
     }
