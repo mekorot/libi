@@ -2,6 +2,9 @@
    Configuration
 ───────────────────────────────────────────── */
 const FLOW_URL = 'flow.json';
+
+// Each user-triggered step in the flow requires typing this exact phrase.
+const START_PHRASE   = 'היי ליבי, אני רוצה להתחיל בבקשה ביקורת בנושא קליטת עובדים חדשים בארגון';
 const CONFIRM_PHRASE = 'תודה, אפשר להתקדם לדוח המסכם';
 
 /* ─────────────────────────────────────────────
@@ -14,7 +17,6 @@ function esc(t) {
 }
 
 function renderText(raw) {
-    // Word-document icon SVG (inline, 14×14)
     const docIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -23,7 +25,6 @@ function renderText(raw) {
         <line x1="16" y1="17" x2="8" y2="17"/>
     </svg>`;
 
-    // ── Map display filenames → actual files served alongside the page ──
     const DOCX_FILE_MAP = {
         'InterimReport.docx': 'InterimReport.docx',
         'SummeryReport.docx': 'SummeryReport.docx'
@@ -34,7 +35,6 @@ function renderText(raw) {
         .replace(/<code>(.+?)<\/code>/g, '<code>$1</code>')
         .replace(/`(.+?)`/g, '<code>$1</code>')
         .replace(/\*(.+?)\*/g, '<em>$1</em>')
-        // ── Make any .docx filename a clickable download link ──
         .replace(/([\w._-]+\.docx)/g, (_, fname) => {
             const src = DOCX_FILE_MAP[fname] || fname;
             return `<a href="${src}" class="doc-link" target="_blank" download="${fname}">${docIcon} ${fname}</a>`;
@@ -114,33 +114,72 @@ function showErrorState(err) {
 }
 
 /* ─────────────────────────────────────────────
-   Waiting-for-confirmation hint
+   Phrase-gate hint helpers
 ───────────────────────────────────────────── */
-function showWaitingHint() {
-    const msgs = document.getElementById('messages');
-    const hint = document.createElement('div');
-    hint.id = 'waitHint';
-    hint.style.cssText = 'text-align:center;padding:18px 24px 6px;';
-    hint.innerHTML = `
-      <div style="display:inline-flex;align-items:center;gap:8px;
-                  background:#FFF8E1;border:1px solid #F59E0B;border-radius:10px;
-                  padding:10px 18px;font-size:13px;color:#7C4A00;direction:rtl">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="12" y1="8" x2="12" y2="12"/>
-          <line x1="12" y1="16" x2="12.01" y2="16"/>
-        </svg>
-        כדי להמשיך לדוח המסכם יש לכתוב:&nbsp;
-        <strong style="color:#5C3200">"תודה, אפשר להתקדם לדוח המסכם"</strong>
+function phraseHintHTML(phrase, hintId) {
+    return `
+      <div id="${hintId}" style="text-align:center;padding:18px 24px 6px;">
+        <div style="display:inline-flex;align-items:center;gap:8px;
+                    background:#FFF8E1;border:1px solid #F59E0B;border-radius:10px;
+                    padding:10px 18px;font-size:13px;color:#7C4A00;direction:rtl">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          כדי להמשיך יש לכתוב בדיוק:&nbsp;
+          <strong style="color:#5C3200">"${esc(phrase)}"</strong>
+        </div>
       </div>`;
-    msgs.appendChild(hint);
+}
+
+function showStartHint() {
+    removeStartHint();
+    const msgs = document.getElementById('messages');
+    const el = document.createElement('div');
+    el.innerHTML = phraseHintHTML(START_PHRASE, 'startHint');
+    msgs.appendChild(el.firstElementChild);
+    msgs.scrollTop = 99999;
+}
+
+function removeStartHint() {
+    const h = document.getElementById('startHint');
+    if (h) h.remove();
+}
+
+function showWaitingHint() {
+    removeWaitingHint();
+    const msgs = document.getElementById('messages');
+    const el = document.createElement('div');
+    el.innerHTML = phraseHintHTML(CONFIRM_PHRASE, 'waitHint');
+    msgs.appendChild(el.firstElementChild);
     msgs.scrollTop = 99999;
 }
 
 function removeWaitingHint() {
     const h = document.getElementById('waitHint');
     if (h) h.remove();
+}
+
+/* ─────────────────────────────────────────────
+   Libi nudge — shown when wrong phrase is typed
+───────────────────────────────────────────── */
+async function showNudge(requiredPhrase) {
+    await showTyping();
+    await sleep(900);
+    removeTyping();
+    appendRow(`<div class="message-row">
+      <div class="msg-avatar agent">${iconSvg('activity').replace('stroke="currentColor"', 'stroke="#fff"')}</div>
+      <div class="msg-body">
+        <div class="msg-name">ליבי <span style="font-weight:400;color:var(--text-tertiary)">· AI</span></div>
+        <div class="msg-bubble">
+          <p>כדי להמשיך לשלב הבא, יש לאשר זאת במפורש עם המשפט:<br>
+            <strong>"${esc(requiredPhrase)}"</strong></p>
+        </div>
+      </div>
+    </div>`);
+    document.getElementById('messages').scrollTop = 99999;
 }
 
 /* ─────────────────────────────────────────────
@@ -182,11 +221,11 @@ function iconSvg(name) {
 ───────────────────────────────────────────── */
 async function runToolBlock(toolEl, tool) {
     const statusEl = toolEl.querySelector('.tool-status');
-    const barEl = toolEl.querySelector('.progress-bar');
-    const durEl = toolEl.querySelector('.tool-dur');
+    const barEl    = toolEl.querySelector('.progress-bar');
+    const durEl    = toolEl.querySelector('.tool-dur');
 
     statusEl.textContent = 'מעבד...';
-    statusEl.className = 'tool-status running';
+    statusEl.className   = 'tool-status running';
 
     if (barEl) {
         barEl.style.transition = `width ${tool.ms}ms linear`;
@@ -196,7 +235,7 @@ async function runToolBlock(toolEl, tool) {
     await sleep(tool.ms);
 
     statusEl.textContent = 'הושלם';
-    statusEl.className = 'tool-status done';
+    statusEl.className   = 'tool-status done';
     if (durEl) durEl.textContent = (tool.ms / 1000).toFixed(1) + 'ש';
 }
 
@@ -276,10 +315,10 @@ async function playUserMessage(msg) {
 /* ─────────────────────────────────────────────
    Flow state
 ───────────────────────────────────────────── */
-let running = false;
-let flowStarted = false;
-let waitingForUser = false;   // true while paused at confirmation gate
-let remainingSteps = [];      // steps queued after the gate
+let running        = false;
+let flowStarted    = false;   // true once the flow has been kicked off
+let waitingForUser = false;   // true while paused at the mid-flow gate
+let remainingSteps = [];      // steps queued after the mid-flow gate
 
 /* ─────────────────────────────────────────────
    Step player  — shared by runFlow + resume
@@ -294,7 +333,8 @@ async function playSteps(steps) {
         if (step.type === 'user' && step.text === CONFIRM_PHRASE) {
             remainingSteps = steps.slice(i);   // keep this step + everything after
             waitingForUser = true;
-            running = false;
+            running        = false;
+            showWaitingHint();
             return;                            // halt — resumed by sendMessage()
         }
 
@@ -316,7 +356,7 @@ async function runFlow() {
     // Full reset
     waitingForUser = false;
     remainingSteps = [];
-    flowStarted = false;
+    flowStarted    = false;
 
     const msgs = document.getElementById('messages');
     msgs.innerHTML = '';
@@ -343,18 +383,28 @@ async function runFlow() {
 function showIdleState() {
     document.getElementById('messages').innerHTML = `
       <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;
-                  height:100%;min-height:320px;gap:14px;padding:48px 24px;text-align:center">
+                  height:100%;min-height:320px;gap:20px;padding:48px 24px;text-align:center">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
              stroke-linecap="round" stroke-linejoin="round" width="44" height="44"
              style="color:var(--mekorot-blue);opacity:0.35">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
         </svg>
         <p style="font-size:15px;font-weight:500;color:var(--text-secondary)">
-          שלח הודעה כדי להתחיל את השיחה
-        </p>
-        <p style="font-size:12px;color:var(--text-tertiary)">
           ליבי מוכנה לסייע לך בביצוע ביקורת הפנים
         </p>
+        <div style="display:inline-flex;align-items:center;gap:8px;
+                    background:#FFF8E1;border:1px solid #F59E0B;border-radius:10px;
+                    padding:12px 20px;font-size:13px;color:#7C4A00;direction:rtl;max-width:520px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span>כדי להתחיל יש לכתוב בדיוק:&nbsp;
+            <strong style="color:#5C3200">"${esc(START_PHRASE)}"</strong>
+          </span>
+        </div>
       </div>`;
 }
 
@@ -371,43 +421,34 @@ function sendMessage() {
     if (!val) return;
     inp.value = '';
 
-    // ── First message: kick off the scripted flow ──
+    // ── Gate 1: flow not yet started — require exact START_PHRASE ──
     if (!flowStarted) {
-        flowStarted = true;
-        runFlow();
+        if (val === START_PHRASE) {
+            flowStarted = true;
+            removeStartHint();
+            runFlow();
+        } else {
+            // Show what the user typed, then a nudge from Libi
+            playUserMessage({ text: val });
+            setTimeout(() => showNudge(START_PHRASE), 400);
+        }
         return;
     }
 
-    // ── Paused at confirmation gate ──
+    // ── Gate 2: paused at mid-flow confirmation ──
     if (waitingForUser) {
         if (val === CONFIRM_PHRASE) {
             removeWaitingHint();
             waitingForUser = false;
             playSteps(remainingSteps);   // plays the scripted user step then continues
         } else {
-            // Show what the user typed, then a gentle nudge from Libi
             playUserMessage({ text: val });
-            setTimeout(async () => {
-                await showTyping();
-                await sleep(900);
-                removeTyping();
-                appendRow(`<div class="message-row">
-                  <div class="msg-avatar agent">${iconSvg('activity').replace('stroke="currentColor"', 'stroke="#fff"')}</div>
-                  <div class="msg-body">
-                    <div class="msg-name">ליבי <span style="font-weight:400;color:var(--text-tertiary)">· AI</span></div>
-                    <div class="msg-bubble">
-                      <p>כדי להמשיך לשלב הדוח המסכם, יש לאשר זאת במפורש עם המשפט:
-                        <strong>"תודה, אפשר להתקדם לדוח המסכם"</strong></p>
-                    </div>
-                  </div>
-                </div>`);
-                document.getElementById('messages').scrollTop = 99999;
-            }, 400);
+            setTimeout(() => showNudge(CONFIRM_PHRASE), 400);
         }
         return;
     }
 
-    // ── Subsequent free-form messages (post-flow) ──
+    // ── Post-flow free-form messages ──
     playUserMessage({ text: val });
     setTimeout(() => { showTyping(); setTimeout(removeTyping, 2200); }, 400);
 }
