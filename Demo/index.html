@@ -13,21 +13,16 @@
 </head>
 
 <body>
-
-  <!-- Sidebar -->
   <aside class="sidebar">
     <div class="sidebar-header">
       <div class="logo-row">
- 
-          <img src="mekorot-logo.png" width="80" alt="מקורות" class="logo-img">
-        
+        <img src="mekorot-logo.png" width="80" alt="מקורות" class="logo-img">
         <div class="logo-text">
           <div class="logo-name">מקורות</div>
           <div class="logo-sub">מחלקת ביקורת פנים</div>
         </div>
       </div>
     </div>
-
     <nav class="sidebar-nav">
       <div class="nav-section">ביקורות אחרונות</div>
       <div class="nav-item active" id="navActive">
@@ -35,57 +30,37 @@
           stroke-linejoin="round">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
         </svg>
-       ביצוע ביקורת להליך קליטת עובד חדש בחברה
+        <span>ביצוע ביקורת להליך קליטת עובד חדש בחברה</span>
       </div>
-      <div class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round">
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-        </svg>
-       ביצוע ביקורת בנושא אחר
-      </div>
-      <div class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round">
+        </svg>ביצוע ביקורת בנושא אחר</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-        </svg>
-       ביצוע ביקורת בנוהל מסוג אחר
-      </div>
-
+        </svg>ביצוע ביקורת בנוהל מסוג אחר</div>
       <div class="nav-section" style="margin-top:10px">כלים</div>
-      <div class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round">
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8" />
           <path d="m21 21-4.35-4.35" />
-        </svg>
-        חיפוש רשת
-      </div>
-      <div class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round">
+        </svg>חיפוש רשת</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
           <polyline points="14 2 14 8 20 8" />
-        </svg>
-        ניתוח מסמכים
-      </div>
-      <div class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round">
+        </svg>ניתוח מסמכים</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
           <polyline points="4 17 10 11 4 5" />
           <line x1="12" y1="19" x2="20" y2="19" />
-        </svg>
-        הרצת פקודות
-      </div>
-      <div class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round">
+        </svg>הרצת פקודות</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
           <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-        </svg>
-        ניטור בזמן אמת
-      </div>
+        </svg>ניטור בזמן אמת</div>
     </nav>
-
     <div class="sidebar-footer">
       <div class="avatar-sm">רד</div>
       <div>
@@ -94,65 +69,50 @@
       </div>
     </div>
   </aside>
-
-  <!-- Main area -->
   <main class="main">
     <div class="water-stripe"></div>
     <div class="top-bar">
       <div class="top-bar-info">
-        <div class="top-bar-title">ביצוע ביקורת פנים להליך קליטת עובדים חדשים</div>
-        <div class="top-bar-sub">סוכן מקורות · היום · 14:32</div>
+        <div class="top-bar-title" id="topBarTitle">–</div>
+        <div class="top-bar-sub" id="topBarSub">סוכן מקורות · ממתין להפעלה</div>
       </div>
       <div class="top-bar-actions">
-        <button class="icon-btn" title="שתף">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
+        <button class="icon-btn" title="שתף"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
             <circle cx="18" cy="5" r="3" />
             <circle cx="6" cy="12" r="3" />
             <circle cx="18" cy="19" r="3" />
             <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
             <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-          </svg>
-        </button>
-        <button class="icon-btn" title="אפשרויות נוספות">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
+          </svg></button>
+        <button class="icon-btn" title="אפשרויות נוספות"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="1" />
             <circle cx="19" cy="12" r="1" />
             <circle cx="5" cy="12" r="1" />
-          </svg>
-        </button>
+          </svg></button>
       </div>
     </div>
-
     <div class="messages" id="messages"></div>
-
     <div class="input-area">
       <div class="input-wrap">
-        <button class="attach-btn" title="צרף קובץ">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round">
+        <button class="attach-btn" title="צרף קובץ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path
               d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48" />
-          </svg>
-        </button>
+          </svg></button>
         <textarea rows="1" placeholder="שלח הודעה לסוכן מקורות..." id="chatInput"
           onkeydown="handleKey(event)"></textarea>
-        <button class="send-btn" onclick="sendMessage()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-            stroke-linejoin="round">
+        <button class="send-btn" onclick="sendMessage()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="12" y1="19" x2="12" y2="5" />
             <polyline points="5 12 12 5 19 12" />
-          </svg>
-        </button>
+          </svg></button>
       </div>
       <div class="input-hint">הסוכן עלול לטעות. אנא אמת מידע קריטי מול מערכות מקורות הרשמיות.</div>
     </div>
   </main>
-
   <script src="scripts.js"></script>
-
-  </script>
 </body>
 
 </html>
