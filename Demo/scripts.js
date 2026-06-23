@@ -16,6 +16,63 @@ function esc(t) {
     return t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
+/* ─────────────────────────────────────────────
+   Document download  — fetch → blob so the
+   browser always triggers a Save dialog and
+   a missing file shows a Hebrew error toast.
+───────────────────────────────────────────── */
+function downloadDoc(fname, src) {
+    fetch(src)
+        .then(r => {
+            if (!r.ok) throw new Error(r.status);
+            return r.blob();
+        })
+        .then(blob => {
+            const url = URL.createObjectURL(blob);
+            const a   = document.createElement('a');
+            a.href     = url;
+            a.download = fname;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 10000);
+        })
+        .catch(() => {
+            // fetch failed (e.g. file:// protocol or network error) —
+            // fall back to a direct anchor download before giving up.
+            try {
+                const a   = document.createElement('a');
+                a.href     = src;
+                a.download = fname;
+                a.target   = '_blank';
+                a.rel      = 'noopener';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } catch (_) {
+                showDocToast(`הקובץ "${fname}" אינו זמין כרגע. ודא שהקובץ נמצא בתיקיית הפרויקט.`);
+            }
+        });
+    return false;   // prevent default <a> navigation
+}
+
+function showDocToast(msg) {
+    const t = document.createElement('div');
+    t.textContent = msg;
+    Object.assign(t.style, {
+        position: 'fixed', bottom: '24px', right: '24px', left: '24px',
+        maxWidth: '480px', margin: '0 auto',
+        background: '#1e3a5f', color: '#fff',
+        padding: '12px 18px', borderRadius: '10px',
+        fontSize: '13px', lineHeight: '1.5',
+        boxShadow: '0 4px 18px rgba(0,0,0,0.25)',
+        zIndex: '9999', textAlign: 'right',
+        animation: 'fadeInUp .25s ease'
+    });
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 5000);
+}
+
 function renderText(raw) {
     const docIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -26,8 +83,9 @@ function renderText(raw) {
     </svg>`;
 
     const DOCX_FILE_MAP = {
-        'InterimReport.docx': 'InterimReport.docx',
-        'SummeryReport.docx': 'SummeryReport.docx'
+        'InterimReport.docx':  'InterimReport.docx',
+        'SummeryReport.docx':  'SummeryReport.docx',
+        'summeryReport.docx':  'SummeryReport.docx'   // flow.json uses lowercase-s variant
     };
 
     return raw
@@ -37,7 +95,7 @@ function renderText(raw) {
         .replace(/\*(.+?)\*/g, '<em>$1</em>')
         .replace(/([\w._-]+\.docx)/g, (_, fname) => {
             const src = DOCX_FILE_MAP[fname] || fname;
-            return `<a href="${src}" class="doc-link" target="_blank" download="${fname}">${docIcon} ${fname}</a>`;
+            return `<a href="#" class="doc-link" onclick="return downloadDoc('${fname}','${src}')">${docIcon} ${fname}</a>`;
         })
         .split('\n\n').map(p => {
             if (p.startsWith('---')) return '<hr class="divider">';
@@ -253,7 +311,7 @@ async function playUserMessage(msg) {
         attachHtml = `<div class="file-pill">${iconSvg('file-text')} ${esc(msg.attachment)}</div>`;
     }
     appendRow(`<div class="message-row user">
-    <div class="msg-avatar user-av">רד</div>
+    <div class="msg-avatar user-av">עק</div>
     <div class="msg-body" style="display:flex;flex-direction:column;align-items:flex-start">
       <div class="msg-name" style="justify-content:flex-start">עודד קלר</div>
       ${attachHtml}
@@ -306,7 +364,7 @@ async function runFlow() {
     // Full reset
     waitingForUser = false;
     remainingSteps = [];
-    flowStarted    = true;   // FIX: was false — caused Gate 1 to re-trigger after Gate 2
+    flowStarted    = true;
 
     const msgs = document.getElementById('messages');
     msgs.innerHTML = '';
@@ -323,8 +381,15 @@ async function runFlow() {
         return;
     }
 
+    // ── Populate title elements now that the flow has actually started ──
+    const title = flow.title || '';
+    document.getElementById('topBarTitle').textContent   = title;
+    document.getElementById('topBarSub').textContent     = 'סוכן מקורות · פעיל';
+    const navLabel = document.getElementById('navActiveLabel');
+    if (navLabel) navLabel.textContent = title;
+
     msgs.innerHTML = '';   // clear loading indicator
-    await playSteps(flow);
+    await playSteps(flow.steps);
 }
 
 /* ─────────────────────────────────────────────
@@ -367,7 +432,6 @@ async function sendMessage() {
             flowStarted = true;
             runFlow();
         } else {
-            // Show what the user typed, then a nudge from Libi
             playUserMessage({ text: val });
             setTimeout(() => showNudge(START_PHRASE), 400);
         }

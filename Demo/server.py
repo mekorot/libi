@@ -14,6 +14,14 @@ import socketserver
 import webbrowser
 import sys
 import os
+import mimetypes
+
+# Ensure .docx is served with the correct MIME type so browsers
+# trigger a Save dialog rather than trying to render the file.
+mimetypes.add_type(
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    '.docx'
+)
 
 # ── Config ────────────────────────────────────────────────────────────────────
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8080
@@ -58,4 +66,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main() 
