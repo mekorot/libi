@@ -10,8 +10,8 @@
     @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&display=swap');
 
     :root {
-      --mekorot-blue: #1A5EA8;
-      --mekorot-blue-dark: #0D3E75;
+      --mekorot-blue: #1E5ECC;
+      --mekorot-blue-dark: #0D1F4E;
       --mekorot-blue-mid: #2A7BC8;
       --mekorot-blue-light: #D6E8F7;
       --mekorot-accent: #0099CC;
@@ -43,7 +43,7 @@
     }
 
     body {
-      font-family: 'Assistant', sans-serif;
+      font-family: 'Noto Sans Hebrew', 'Segoe UI', Arial, sans-serif;
       background: var(--neutral-100);
       color: var(--neutral-900);
       line-height: 1.6;
@@ -52,7 +52,7 @@
 
     /* ── HEADER ── */
     .report-header {
-      background: linear-gradient(135deg, var(--mekorot-blue-dark) 0%, var(--mekorot-blue) 50%, var(--mekorot-blue-mid) 100%);
+      background: var(--mekorot-blue-dark);
       padding: 48px 0 0;
       position: relative;
       overflow: hidden;
@@ -110,7 +110,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      backdrop-filter: blur(4px);
       border: 1px solid rgba(255, 255, 255, 0.25);
     }
 
@@ -176,7 +175,6 @@
       background: rgba(255, 255, 255, 0.07);
       padding: 20px 24px;
       text-align: center;
-      backdrop-filter: blur(6px);
       transition: background 0.2s;
     }
 
@@ -468,7 +466,7 @@
     .ratio-fill {
       height: 6px;
       border-radius: 3px;
-      background: linear-gradient(90deg, var(--status-red), var(--status-yellow) 60%, var(--status-green));
+      background: var(--mekorot-blue);
       position: relative;
     }
 
@@ -649,7 +647,7 @@
     .retention-fill {
       height: 8px;
       border-radius: 4px;
-      background: linear-gradient(90deg, var(--mekorot-blue), var(--mekorot-accent));
+      background: var(--mekorot-blue);
     }
 
     .retention-avg {
@@ -850,7 +848,7 @@
     <!-- ── OVERVIEW ── -->
     <section id="overview" class="section active">
       <div class="section-header">
-        <div class="section-icon">📊</div>
+        <div class="section-icon">◼</div>
         <div>
           <div class="section-title">רקע ותמצית ביקורת</div>
           <div class="section-desc">ביקורת לתקופת 2023–2024 על תהליכי גיוס, קליטה ושימור כ"א אקדמי</div>
@@ -872,27 +870,27 @@
         <div class="card-title">תהליך הגיוס — מבנה שלבים</div>
         <div class="process-flow">
           <div class="process-step">
-            <div class="step-circle">📋</div>
+            <div class="step-circle">1</div>
             <div class="step-label">משרה פנויה</div>
             <div class="step-sub">פתיחה ממגוון סיבות</div>
           </div>
           <div class="process-step">
-            <div class="step-circle">🔍</div>
+            <div class="step-circle">◼</div>
             <div class="step-label">מכרז פנימי</div>
             <div class="step-sub">בחינת עובדים קיימים</div>
           </div>
           <div class="process-step">
-            <div class="step-circle">📢</div>
+            <div class="step-circle">2</div>
             <div class="step-label">גיוס חיצוני</div>
             <div class="step-sub">אם לא נמצא מתאים</div>
           </div>
           <div class="process-step">
-            <div class="step-circle">🎯</div>
+            <div class="step-circle">3</div>
             <div class="step-label">בחירת מועמד</div>
             <div class="step-sub">ראיונות + אבחון</div>
           </div>
           <div class="process-step">
-            <div class="step-circle">✅</div>
+            <div class="step-circle">4</div>
             <div class="step-label">קליטה</div>
             <div class="step-sub">חניכה ומסמכים</div>
           </div>
@@ -949,7 +947,7 @@
     <!-- ── RECRUITMENT ── -->
     <section id="recruitment" class="section">
       <div class="section-header">
-        <div class="section-icon">🔍</div>
+        <div class="section-icon">◼</div>
         <div>
           <div class="section-title">תהליכי גיוס</div>
           <div class="section-desc">ממצאים בנושא מערכות מידע, מבנה ארגוני, מדידה ובחירת מועמדים</div>
@@ -1286,7 +1284,7 @@
     <!-- ── RECOMMENDATIONS ── -->
     <section id="recommendations" class="section">
       <div class="section-header">
-        <div class="section-icon">📋</div>
+        <div class="section-icon">1</div>
         <div>
           <div class="section-title">סיכום המלצות</div>
           <div class="section-desc">20 המלצות, מצב תגובה, אחראי ויעד לביצוע</div>

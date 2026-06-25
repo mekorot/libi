@@ -856,3 +856,160 @@ textarea:focus-visible{
 .typing-dot{
   background:#1E5ECC;
 }
+
+/* ===== GLOBAL THEME ALIGNMENT ===== */
+:root {
+  --mekorot-blue: #034EA2;
+  --mekorot-blue-dark: #032A61;
+  --mekorot-blue-light: #E6F0FB;
+
+  --bg: #E2E6EC;              /* MAIN background */
+  --bg-secondary: #FDFDFD;    /* sidebar + cards */
+  --bg-tertiary: #F4F7FC;
+
+  --text: #0D1B2A;
+  --text-secondary: #3D5166;
+  --text-tertiary: #656D82;
+
+  --border: rgba(3, 42, 97, 0.12);
+  --border-mid: rgba(3, 42, 97, 0.15);
+
+  --agent-bg: #F4F8FC;
+  --user-bg: #0057A8;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+}
+
+/* ===== BODY ===== */
+body {
+  background: var(--bg);
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  background: var(--bg-secondary); /* white like design */
+}
+
+.logo-name {
+  font-weight: 700; /* stronger like Figma */
+}
+
+/* ===== MAIN ===== */
+.main {
+  background: var(--bg);
+}
+
+/* ===== TOP BAR ===== */
+.top-bar {
+  background: var(--mekorot-blue-dark);
+  color: #C7DCFF;
+  box-shadow:
+    0 2px 2px rgba(3,42,97,0.3),
+    0 2px 8px rgba(3,42,97,0.18);
+}
+
+.top-bar-title {
+  color: #C7DCFF;
+  font-weight: 700;
+}
+
+.top-bar-sub {
+  color: rgba(199,220,255,0.55);
+}
+
+/* buttons in header */
+.top-bar .icon-btn {
+  border: 1px solid rgba(199,220,255,0.2);
+  color: #C7DCFF;
+}
+
+.top-bar .icon-btn:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+/* ===== MESSAGE AREA BG ===== */
+.messages {
+  background: var(--bg);
+}
+
+/* ===== CARD SHADOW (lighter like design) ===== */
+.msg-bubble,
+.tool-block,
+.input-wrap {
+  box-shadow: none;
+  border-radius: 12px;
+}
+
+/* ===== EMPTY STATE CENTER ===== */
+.messages:empty::after {
+  content: "ליבי מוכנה לסייע לך בביצוע ביקורת הפנים\A שלח הודעה כדי להתחיל";
+  white-space: pre;
+  display: block;
+  text-align: center;
+  margin-top: 120px;
+  font-size: 14px;
+  color: var(--text-tertiary);
+}
+
+/* ===== INPUT AREA ===== */
+.input-area {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+}
+
+.input-wrap {
+  background: var(--bg-secondary);
+  border-radius: 18px;
+}
+
+/* send button disabled state like design */
+.send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== PRIMARY BUTTON STYLE ===== */
+button.primary,
+.btn-primary {
+  background: #034EA2;
+  color: white;
+  font-weight: 700;
+  border-radius: 8px;
+}
+
+button.primary:hover {
+  opacity: 0.9;
+}
+
+/* ===== NAV ITEMS ===== */
+.nav-item {
+  font-size: 13px;
+}
+
+.nav-item:hover {
+  background: #F4F7FC;
+}
+
+.nav-item.active {
+  background: #E6F0FB;
+  border-right: 3px solid #034EA2;
+  font-weight: 600;
+}
+
+/* ===== AVATAR ===== */
+.avatar-sm {
+  background: rgba(3,42,97,0.1);
+  font-weight: 700;
+}
+
+/* ===== SCROLLBAR (clean minimal like Figma) ===== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.15);
+  border-radius: 3px;
+}
