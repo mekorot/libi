@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>דוח ביקורת | גיוס קליטה ושימור מהנדסים ואקדמאים | מקורות</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&display=swap');
+
+    :root {
+      --mekorot-blue: #1A5EA8;
+      --mekorot-blue-dark: #0D3E75;
+      --mekorot-blue-mid: #2A7BC8;
+      --mekorot-blue-light: #D6E8F7;
+      --mekorot-accent: #0099CC;
+      --mekorot-teal: #00A99D;
+      --mekorot-sky: #E8F4FD;
+      --status-green: #27AE60;
+      --status-yellow: #F39C12;
+      --status-red: #E74C3C;
+      --status-orange: #E67E22;
+      --neutral-900: #1A1F2E;
+      --neutral-700: #3D4A5C;
+      --neutral-500: #6B7A8D;
+      --neutral-300: #C5CDD6;
+      --neutral-100: #F2F5F8;
+      --white: #FFFFFF;
+      --shadow-sm: 0 2px 8px rgba(26, 94, 168, 0.08);
+      --shadow-md: 0 4px 20px rgba(26, 94, 168, 0.12);
+      --shadow-lg: 0 8px 40px rgba(26, 94, 168, 0.16);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Assistant', sans-serif;
+      background: var(--neutral-100);
+      color: var(--neutral-900);
+      line-height: 1.6;
+      direction: rtl;
+    }
+
+    /* ── HEADER ── */
+    .report-header {
+      background: linear-gradient(135deg, var(--mekorot-blue-dark) 0%, var(--mekorot-blue) 50%, var(--mekorot-blue-mid) 100%);
+      padding: 48px 0 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .report-header::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      left: -60px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(0, 153, 204, 0.18) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .report-header::after {
+      content: '';
+      position: absolute;
+      bottom: 40px;
+      left: 10%;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(0, 169, 157, 0.12) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 32px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-water-drop {
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .logo-water-drop::after {
+      content: '';
+      width: 20px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 50% 50% 50% 0;
+      transform: none;
+    }
+
+    .logo-text {
+      color: var(--white);
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-sub {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 13px;
+      font-weight: 400;
+    }
+
+    .header-date {
+      background: rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.85);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .header-title {
+      color: var(--white);
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .header-subtitle {
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 16px;
+      font-weight: 400;
+      margin-bottom: 36px;
+    }
+
+    /* KPI strip */
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      overflow: hidden;
+      margin-top: 0;
+    }
+
+    .kpi-cell {
+      background: rgba(255, 255, 255, 0.07);
+      padding: 20px 24px;
+      text-align: center;
+      backdrop-filter: blur(6px);
+      transition: background 0.2s;
+    }
+
+    .kpi-cell:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .kpi-num {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .kpi-num span {
+      font-size: 18px;
+      font-weight: 400;
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.65);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    /* ── NAV TABS ── */
+    .nav-tabs {
+      background: var(--white);
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 2px solid var(--mekorot-blue-light);
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .nav-inner::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-tab {
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--neutral-500);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+      border-bottom-width: 3px;
+      margin-bottom: -2px;
+    }
+
+    .nav-tab:hover {
+      color: var(--mekorot-blue);
+    }
+
+    .nav-tab.active {
+      color: var(--mekorot-blue);
+      border-bottom-color: var(--mekorot-blue);
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .main-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 32px 64px;
+    }
+
+    /* ── SECTIONS ── */
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      padding: 28px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(26, 94, 168, 0.06);
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--mekorot-blue-dark);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-title::before {
+      content: '';
+      width: 4px;
+      height: 20px;
+      background: var(--mekorot-accent);
+      border-radius: 2px;
+      display: inline-block;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--mekorot-blue-light);
+    }
+
+    .section-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--mekorot-sky);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 22px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--mekorot-blue-dark);
+    }
+
+    .section-desc {
+      font-size: 14px;
+      color: var(--neutral-500);
+      margin-top: 4px;
+    }
+
+    /* ── FINDING CARDS ── */
+    .finding-card {
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 16px;
+      border-right: 4px solid;
+      position: relative;
+    }
+
+    .finding-card.critical {
+      background: #FEF2F2;
+      border-color: var(--status-red);
+    }
+
+    .finding-card.warning {
+      background: #FFFBEB;
+      border-color: var(--status-yellow);
+    }
+
+    .finding-card.info {
+      background: var(--mekorot-sky);
+      border-color: var(--mekorot-accent);
+    }
+
+    .finding-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .finding-card.critical .finding-title {
+      color: #C0392B;
+    }
+
+    .finding-card.warning .finding-title {
+      color: #B7770D;
+    }
+
+    .finding-card.info .finding-title {
+      color: var(--mekorot-blue-dark);
+    }
+
+    .finding-body {
+      font-size: 13.5px;
+      color: var(--neutral-700);
+      line-height: 1.65;
+    }
+
+    .finding-rec {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      color: var(--neutral-700);
+    }
+
+    .finding-rec strong {
+      color: var(--mekorot-blue);
+    }
+
+    /* STATUS BADGE */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+
+    .badge-accepted {
+      background: #D1FAE5;
+      color: #065F46;
+    }
+
+    .badge-partial {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+
+    .badge-rejected {
+      background: #FEE2E2;
+      color: #991B1B;
+    }
+
+    /* ── SALARY TABLE ── */
+    .salary-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+
+    .salary-table th {
+      background: var(--mekorot-blue);
+      color: var(--white);
+      padding: 10px 14px;
+      text-align: right;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .salary-table th:first-child {
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+
+    .salary-table th:last-child {
+      border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+    }
+
+    .salary-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--neutral-100);
+    }
+
+    .salary-table tr:hover td {
+      background: var(--mekorot-sky);
+    }
+
+    .ratio-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ratio-fill {
+      height: 6px;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--status-red), var(--status-yellow) 60%, var(--status-green));
+      position: relative;
+    }
+
+    .ratio-num {
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .ratio-low {
+      color: var(--status-red);
+    }
+
+    .ratio-mid {
+      color: var(--status-yellow);
+    }
+
+    .ratio-ok {
+      color: var(--status-green);
+    }
+
+    /* ── TIMELINE / PROCESS ── */
+    .process-flow {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      margin: 8px 0;
+      direction: rtl;
+    }
+
+    .process-step {
+      flex: 1;
+      text-align: center;
+      position: relative;
+    }
+
+    .process-step:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      top: 24px;
+      left: 0;
+      width: 50%;
+      height: 2px;
+      background: var(--neutral-300);
+      z-index: 0;
+    }
+
+    .process-step:not(:first-child)::after {
+      content: '';
+      position: absolute;
+      top: 24px;
+      right: 0;
+      width: 50%;
+      height: 2px;
+      background: var(--neutral-300);
+      z-index: 0;
+    }
+
+    .step-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--mekorot-blue);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      margin: 0 auto 10px;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 0 0 4px var(--mekorot-blue-light);
+    }
+
+    .step-label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--neutral-700);
+    }
+
+    .step-sub {
+      font-size: 11px;
+      color: var(--neutral-500);
+      margin-top: 2px;
+    }
+
+    /* ── DURATION CHART ── */
+    .duration-bar-wrap {
+      margin-bottom: 12px;
+    }
+
+    .duration-bar-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--neutral-700);
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .duration-bar-track {
+      height: 10px;
+      background: var(--neutral-100);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .duration-bar-fill {
+      height: 10px;
+      border-radius: 5px;
+      transition: width 1s ease;
+    }
+
+    /* ── METRIC RINGS ── */
+    .metric-ring-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .metric-ring-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(26, 94, 168, 0.07);
+    }
+
+    .ring-num {
+      font-size: 36px;
+      font-weight: 800;
+    }
+
+    .ring-unit {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .ring-label {
+      font-size: 12.5px;
+      color: var(--neutral-500);
+      margin-top: 4px;
+    }
+
+    /* ── RETENTION TABLE ── */
+    .retention-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--neutral-100);
+    }
+
+    .retention-tag {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--neutral-700);
+      min-width: 160px;
+    }
+
+    .retention-count {
+      font-size: 13px;
+      color: var(--neutral-500);
+      min-width: 40px;
+      text-align: center;
+    }
+
+    .retention-bar {
+      flex: 1;
+      height: 8px;
+      background: var(--neutral-100);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .retention-fill {
+      height: 8px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--mekorot-blue), var(--mekorot-accent));
+    }
+
+    .retention-avg {
+      font-size: 12px;
+      color: var(--neutral-500);
+      min-width: 80px;
+      text-align: left;
+    }
+
+    /* ── FINDING ACCORDION ── */
+    .accordion-item {
+      margin-bottom: 8px;
+    }
+
+    .accordion-header {
+      background: var(--mekorot-sky);
+      border: 1px solid var(--mekorot-blue-light);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--mekorot-blue-dark);
+      transition: background 0.2s;
+      user-select: none;
+    }
+
+    .accordion-header:hover {
+      background: #d4eaf7;
+    }
+
+    .accordion-header .chevron {
+      font-size: 18px;
+      transition: transform 0.3s;
+    }
+
+    .accordion-header.open .chevron {
+      transform: rotate(180deg);
+    }
+
+    .accordion-body {
+      display: none;
+      padding: 16px 18px;
+      background: var(--white);
+      border: 1px solid var(--mekorot-blue-light);
+      border-top: none;
+      border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+      font-size: 13.5px;
+      color: var(--neutral-700);
+      line-height: 1.7;
+    }
+
+    .accordion-body.open {
+      display: block;
+    }
+
+    /* ── SUMMARY TABLE ── */
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+
+    .summary-table th {
+      background: var(--neutral-100);
+      padding: 10px 14px;
+      text-align: right;
+      font-weight: 700;
+      color: var(--neutral-700);
+      border-bottom: 2px solid var(--mekorot-blue-light);
+    }
+
+    .summary-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--neutral-100);
+      vertical-align: top;
+    }
+
+    .summary-table tr:hover td {
+      background: var(--mekorot-sky);
+    }
+
+    .tag-section {
+      display: inline-block;
+      padding: 2px 8px;
+      background: var(--mekorot-blue-light);
+      color: var(--mekorot-blue-dark);
+      border-radius: 4px;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--mekorot-blue-dark);
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+      padding: 24px;
+      font-size: 12.5px;
+    }
+
+    footer strong {
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .kpi-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .grid-2,
+      .grid-3,
+      .metric-ring-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header-inner,
+      .main-content {
+        padding: 0 16px;
+      }
+
+      .main-content {
+        padding-top: 20px;
+        padding-bottom: 48px;
+      }
+
+      .process-flow {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .process-step::before,
+      .process-step::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══ HEADER ══ -->
+  <header class="report-header">
+    <div class="header-inner">
+      <div class="header-logo-row">
+        <div class="logo-area">
+
+          <img src="mekorot-logo-white.png" width="120" alt="Mekorot Logo">
+
+          <div>
+
+          </div>
+        </div>
+        <span class="header-date">אוקטובר 2024</span>
+      </div>
+      <div class="header-title">דוח ביקורת פנים</div>
+      <div class="header-subtitle">גיוס, קליטה ושימור מהנדסים ואקדמאים — ממצאים, ניתוחים והמלצות</div>
+      <div class="kpi-strip">
+        <div class="kpi-cell">
+          <div class="kpi-num">440<span> עובד</span></div>
+          <div class="kpi-label">מהנדסים ואקדמאים בחברה</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kpi-num">20<span> המלצות</span></div>
+          <div class="kpi-label">ממצאים ביקורת</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kpi-num">₪23,286</div>
+          <div class="kpi-label">מענק קליטה/שימור ממוצע לשנה</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kpi-num">4<span> חודשים</span></div>
+          <div class="kpi-label">ממוצע משך גיוס חיצוני</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══ NAV ══ -->
+  <nav class="nav-tabs">
+    <div class="nav-inner">
+      <div class="nav-tab active" onclick="switchTab('overview',this)">סקירה כללית</div>
+      <div class="nav-tab" onclick="switchTab('recruitment',this)">תהליכי גיוס</div>
+      <div class="nav-tab" onclick="switchTab('salaries',this)">פערי שכר</div>
+      <div class="nav-tab" onclick="switchTab('onboarding',this)">קליטה</div>
+      <div class="nav-tab" onclick="switchTab('retention',this)">שימור</div>
+      <div class="nav-tab" onclick="switchTab('recommendations',this)">סיכום המלצות</div>
+    </div>
+  </nav>
+
+  <!-- ══ CONTENT ══ -->
+  <main class="main-content">
+
+    <!-- ── OVERVIEW ── -->
+    <section id="overview" class="section active">
+      <div class="section-header">
+        <div class="section-icon">📊</div>
+        <div>
+          <div class="section-title">רקע ותמצית ביקורת</div>
+          <div class="section-desc">ביקורת לתקופת 2023–2024 על תהליכי גיוס, קליטה ושימור כ"א אקדמי</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">מצב עובדים — רבעון 1, 2024</div>
+          <canvas id="staffChart" height="220"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-title">מענקי קליטה ושימור 2023</div>
+          <canvas id="grantChart" height="220"></canvas>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">תהליך הגיוס — מבנה שלבים</div>
+        <div class="process-flow">
+          <div class="process-step">
+            <div class="step-circle">📋</div>
+            <div class="step-label">משרה פנויה</div>
+            <div class="step-sub">פתיחה ממגוון סיבות</div>
+          </div>
+          <div class="process-step">
+            <div class="step-circle">🔍</div>
+            <div class="step-label">מכרז פנימי</div>
+            <div class="step-sub">בחינת עובדים קיימים</div>
+          </div>
+          <div class="process-step">
+            <div class="step-circle">📢</div>
+            <div class="step-label">גיוס חיצוני</div>
+            <div class="step-sub">אם לא נמצא מתאים</div>
+          </div>
+          <div class="process-step">
+            <div class="step-circle">🎯</div>
+            <div class="step-label">בחירת מועמד</div>
+            <div class="step-sub">ראיונות + אבחון</div>
+          </div>
+          <div class="process-step">
+            <div class="step-circle">✅</div>
+            <div class="step-label">קליטה</div>
+            <div class="step-sub">חניכה ומסמכים</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="finding-card critical">
+          <div class="finding-title">⚠️ אין מערכת גיוס ממוכנת</div>
+          <div class="finding-body">כל תהליכי הגיוס מתבצעים ידנית בקבצי אקסל. תיעוד חלקי, ללא מזהה ת"ז, ולא ניתן לאתר
+            מועמדים חוזרים.</div>
+          <span class="badge badge-accepted">בטיפול — צפי Q2 2025</span>
+        </div>
+        <div class="finding-card warning">
+          <div class="finding-title">⏱️ משך גיוס ארוך</div>
+          <div class="finding-body">ממוצע 3 חודשים לגיוס פנימי, 4 חודשים לחיצוני. מהנדסים ואקדמאים — מעל 4 חודשים. מקרים
+            של יותר מ-12 חודשים.</div>
+          <span class="badge badge-accepted">ממצא מאושר</span>
+        </div>
+        <div class="finding-card critical">
+          <div class="finding-title">💸 פערי שכר מול השוק</div>
+          <div class="finding-body">שכר מהנדסים ב-45%–80% מהשוק בתחומים מסוימים. קשה לגייס מועמדים איכותיים — נאלצים
+            לבחור "במצוי ולא ברצוי".</div>
+          <span class="badge badge-accepted">מטופל בהסכם קיבוצי</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">סיכוני ביקורת עיקריים</div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <div
+            style="flex:1; min-width:200px; background:var(--neutral-100); border-radius:var(--radius-sm); padding:16px; text-align:center;">
+            <div style="font-size:28px; margin-bottom:8px;">🧠</div>
+            <div style="font-weight:700; color:var(--neutral-700); font-size:14px;">אבדן ידע קריטי</div>
+            <div style="font-size:12.5px; color:var(--neutral-500); margin-top:4px;">עזיבת עובדים מומחים ללא חפיפה</div>
+          </div>
+          <div
+            style="flex:1; min-width:200px; background:var(--neutral-100); border-radius:var(--radius-sm); padding:16px; text-align:center;">
+            <div style="font-size:28px; margin-bottom:8px;">⏳</div>
+            <div style="font-weight:700; color:var(--neutral-700); font-size:14px;">פגיעה בפעילות השוטפת</div>
+            <div style="font-size:12.5px; color:var(--neutral-500); margin-top:4px;">משרות פתוחות לאורך זמן</div>
+          </div>
+          <div
+            style="flex:1; min-width:200px; background:var(--neutral-100); border-radius:var(--radius-sm); padding:16px; text-align:center;">
+            <div style="font-size:28px; margin-bottom:8px;">💰</div>
+            <div style="font-weight:700; color:var(--neutral-700); font-size:14px;">בזבוז משאבים</div>
+            <div style="font-size:12.5px; color:var(--neutral-500); margin-top:4px;">הליכי גיוס חוזרים ללא מאגר מועמדים
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── RECRUITMENT ── -->
+    <section id="recruitment" class="section">
+      <div class="section-header">
+        <div class="section-icon">🔍</div>
+        <div>
+          <div class="section-title">תהליכי גיוס</div>
+          <div class="section-desc">ממצאים בנושא מערכות מידע, מבנה ארגוני, מדידה ובחירת מועמדים</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">משך גיוס — ממוצע לפי סוג</div>
+        <div style="margin-top:8px;">
+          <div class="duration-bar-wrap">
+            <div class="duration-bar-label"><span>גיוס פנימי</span><span style="color:var(--mekorot-blue)">3
+                חודשים</span></div>
+            <div class="duration-bar-track">
+              <div class="duration-bar-fill"
+                style="width:43%; background:linear-gradient(90deg,var(--mekorot-blue),var(--mekorot-accent));"></div>
+            </div>
+          </div>
+          <div class="duration-bar-wrap">
+            <div class="duration-bar-label"><span>גיוס חיצוני</span><span style="color:var(--mekorot-blue)">4
+                חודשים</span></div>
+            <div class="duration-bar-track">
+              <div class="duration-bar-fill"
+                style="width:57%; background:linear-gradient(90deg,var(--mekorot-blue),var(--mekorot-accent));"></div>
+            </div>
+          </div>
+          <div class="duration-bar-wrap">
+            <div class="duration-bar-label"><span>פנימי שנכשל + חיצוני</span><span style="color:var(--status-orange)">7
+                חודשים</span></div>
+            <div class="duration-bar-track">
+              <div class="duration-bar-fill"
+                style="width:100%; background:linear-gradient(90deg,var(--status-yellow),var(--status-orange));"></div>
+            </div>
+          </div>
+          <div class="duration-bar-wrap">
+            <div class="duration-bar-label"><span>מהנדסים/אקדמאים (ממוצע בדגימה)</span><span
+                style="color:var(--status-red)">4+ חודשים</span></div>
+            <div class="duration-bar-track">
+              <div class="duration-bar-fill"
+                style="width:65%; background:linear-gradient(90deg,var(--status-yellow),var(--status-red));"></div>
+            </div>
+          </div>
+          <div class="duration-bar-wrap">
+            <div class="duration-bar-label"><span>רו"ח (כולל כישלון ראשוני)</span><span
+                style="color:var(--status-red)">12 חודשים</span></div>
+            <div class="duration-bar-track">
+              <div class="duration-bar-fill" style="width:100%; background:var(--status-red);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <div class="finding-card critical">
+            <div class="finding-title">1.1 — העדר מערכת גיוס ממוכנת</div>
+            <div class="finding-body">כל מראיין מנהל רשימות מועמדים בנפרד. ברוב המקרים ב-Excel ללא ת"ז, ובחלק — במחברות
+              ידניות. אי-אפשר לאתר מועמדים חוזרים מהעבר.</div>
+            <div class="finding-rec"><strong>המלצה:</strong> הגדרת תהליך מסודר ואחיד עד לרכש מערכת. צפי יישום: Q2 2025.
+            </div>
+            <span class="badge badge-accepted">בטיפול</span>
+          </div>
+          <div class="finding-card warning">
+            <div class="finding-title">1.2 — מבנה ארגוני: גיוס מבוזר</div>
+            <div class="finding-body">הגיוס מתבצע כמעט עצמאית ע"י המרחבים. ייתכן שמועמד יעבור הליכים במקביל בכמה מרחבים
+              ללא שיתוף מידע.</div>
+            <div class="finding-rec"><strong>המלצה:</strong> לבחון גיוס מרכזי למשרות תדירות/קשות.</div>
+            <span class="badge badge-partial">בחינה — Q2 2025</span>
+          </div>
+        </div>
+        <div>
+          <div class="finding-card warning">
+            <div class="finding-title">1.4 — תיעוד בחירת מועמד</div>
+            <div class="finding-body">בגיוס חיצוני — לא מתועד תהליך בחירת העובד. נמצא מקרה שהתקבל מועמד עם ציון אבחון
+              נמוך יותר מאחרת שלא נקלטה כלל.</div>
+            <div class="finding-rec"><strong>המלצה:</strong> לתעד שיקולים לבחירת עובד ודחיית מועמדים אחרים.</div>
+            <span class="badge badge-accepted">מאושר</span>
+          </div>
+          <div class="finding-card info">
+            <div class="finding-title">1.5 — מדיניות אבחון מועמדים</div>
+            <div class="finding-body">לא קיימת מדיניות לגבי משרות הנדרשות באבחון בכל מקרה. ברוב האיושים הפנימיים לא
+              נערכים מבדקים.</div>
+            <div class="finding-rec"><strong>המלצה:</strong> לקבוע קריטריונים למשרות הדורשות אבחון חובה.</div>
+            <span class="badge badge-rejected">לא מקובל — ניגוד עם ההסכם הקיבוצי</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">ממצאי פרסום משרות (סעיפים 3.3–3.5 ו-6.3)</div>
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAcc(this)">3.3 — פרסום ממוקד <span class="chevron">▾</span></div>
+          <div class="accordion-body">העדר פרסום ממוקד מאריך משך גיוס ומפחית איכות הפניות. מומלץ לבצע הרחבה ממוקדת
+            לקבוצות ייעודיות (בוגרים, מקצועיים, מכללות) כבר בשלב פרסום המשרה. <span
+              class="badge badge-partial">בחינה</span></div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAcc(this)">3.4 — פרסום בלינקדאין <span class="chevron">▾</span>
+          </div>
+          <div class="accordion-body">המשרות מפורסמות כחלק מפוסטים שיווקיים כלליים ולא תחת קטגוריית JOBS הייעודית. כך
+            קשה למחפשי עבודה למצוא ולסנן לפי תחום. בנוסף — אין תמריץ לעובדים להפיץ משרות. <span
+              class="badge badge-accepted">מאושר — בביצוע</span></div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAcc(this)">6.3 — "חבר מביא חבר" <span class="chevron">▾</span>
+          </div>
+          <div class="accordion-body">השיטה מוכיחה את עצמה ביחידת השפד"ן אך לא נרחבת לשאר המרחבים. מאפשרת גיוס איכותי
+            וזול יחסית של מועמדים שמכירים את ערכי הארגון. <span class="badge badge-accepted">אושר — יופיץ 11/2024</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SALARIES ── -->
+    <section id="salaries" class="section">
+      <div class="section-header">
+        <div class="section-icon">💰</div>
+        <div>
+          <div class="section-title">פערי שכר מול השוק</div>
+          <div class="section-desc">השוואת שכר מהנדסים, אקדמאים ורו"ח מול נתוני צבירן</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">יחס שכר מקורות מול שוק — מהנדסים נבחרים</div>
+        <canvas id="salaryRatioChart" height="280"></canvas>
+        <div style="margin-top:12px; font-size:12.5px; color:var(--neutral-500);">* יחס מחושב: שכר ממוצע בחברה ÷ ממוצע
+          השוק לפי צבירן. כולל מענקים. מתחת ל-80% = מאתגר לגיוס.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">טבלת השוואה מפורטת — שכר בסיס ללא מענקים</div>
+        <div style="overflow-x:auto;">
+          <table class="salary-table">
+            <thead>
+              <tr>
+                <th>תפקיד</th>
+                <th>מינימום בחברה</th>
+                <th>ממוצע בחברה</th>
+                <th>ממוצע שוק</th>
+                <th>יחס שכר</th>
+              </tr>
+            </thead>
+            <tbody id="salaryTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="finding-card critical">
+          <div class="finding-title">2.2 — קושי בגיוס עקב פערי שכר</div>
+          <div class="finding-body">
+            שכר מהנדסים מתחיל בדרגה 4-5 ונמוך משמעותית משוק. המענקים מצמצמים את הפער אך השכר הפנסיוני נשאר נמוך. בנוסף,
+            תפקידים לא-אקדמיים (ממוני תחבורה, בטיחות, גביה) מדורגים בדרגה 7 — גבוה ממהנדסים רבים.
+          </div>
+          <div class="finding-rec"><strong>המלצה 8:</strong> להגדיר תחומי ליבה ולפעול לעדכון שכר בהסכם הקיבוצי.</div>
+          <span class="badge badge-accepted">מקודם בהסכם הקיבוצי החדש</span>
+        </div>
+        <div class="finding-card warning">
+          <div class="finding-title">2.1 — גיוס כ"א לא-איכותי</div>
+          <div class="finding-body">
+            בסוף תהליכי מיון לא נשארים מועמדים איכותיים — החברה בוחרת "במצוי ולא ברצוי". מתוך 8 משרות חיצוניות שנדגמו,
+            רק ב-2 האבחונים יצאו גבוהים.
+          </div>
+          <div class="finding-rec"><strong>המלצה 7:</strong> למפות משרות עם קושי בגיוס איכותי ולשקול הסכמים אישיים.
+          </div>
+          <span class="badge badge-accepted">מקובל</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ONBOARDING ── -->
+    <section id="onboarding" class="section">
+      <div class="section-header">
+        <div class="section-icon">🤝</div>
+        <div>
+          <div class="section-title">קליטת עובדים</div>
+          <div class="section-desc">מסמכי קליטה, חניכה, הכשרה ומשוב — ממצאים מדגימת 10 עובדים</div>
+        </div>
+      </div>
+
+      <div class="grid-3" style="margin-bottom:24px;">
+        <div class="metric-ring-card">
+          <div class="ring-num" style="color:var(--status-red)">20%</div>
+          <div class="ring-label">עובדים ללא תוכנית חניכה מתועדת</div>
+        </div>
+        <div class="metric-ring-card">
+          <div class="ring-num" style="color:var(--status-red)">60%</div>
+          <div class="ring-label">עובדים ללא מעקב מתועד אחר ביצוע הדרכה</div>
+        </div>
+        <div class="metric-ring-card">
+          <div class="ring-num" style="color:var(--status-orange)">20%</div>
+          <div class="ring-label">עובדות ללא שיחות משוב בשנה הראשונה</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">שלבי תהליך קליטה</div>
+        <div style="display:flex; flex-direction:column; gap:12px; margin-top:4px;">
+          <div
+            style="display:flex; align-items:center; gap:14px; padding:14px; background:var(--mekorot-sky); border-radius:var(--radius-sm);">
+            <div
+              style="width:32px;height:32px;background:var(--mekorot-blue);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">
+              1</div>
+            <div>
+              <div style="font-weight:700;font-size:14px;">מסמכי קליטה</div>
+              <div style="font-size:12.5px;color:var(--neutral-500);">מרחב → בקרת מטה → יחידת שכר</div>
+            </div>
+          </div>
+          <div
+            style="display:flex; align-items:center; gap:14px; padding:14px; background:var(--mekorot-sky); border-radius:var(--radius-sm);">
+            <div
+              style="width:32px;height:32px;background:var(--mekorot-blue);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">
+              2</div>
+            <div>
+              <div style="font-weight:700;font-size:14px;">מינוי חונך יחידתי</div>
+              <div style="font-size:12.5px;color:var(--neutral-500);">לפני תחילת עבודה, כולל תוכנית חניכה ולו"ז</div>
+            </div>
+          </div>
+          <div
+            style="display:flex; align-items:center; gap:14px; padding:14px; background:var(--mekorot-sky); border-radius:var(--radius-sm);">
+            <div
+              style="width:32px;height:32px;background:var(--mekorot-blue);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">
+              3</div>
+            <div>
+              <div style="font-weight:700;font-size:14px;">פגישות מעקב חודשיות</div>
+              <div style="font-size:12.5px;color:var(--neutral-500);">3 חודשים ראשונים — ממונה ישיר מתעד</div>
+            </div>
+          </div>
+          <div
+            style="display:flex; align-items:center; gap:14px; padding:14px; background:var(--mekorot-sky); border-radius:var(--radius-sm);">
+            <div
+              style="width:32px;height:32px;background:var(--mekorot-blue);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;">
+              4</div>
+            <div>
+              <div style="font-weight:700;font-size:14px;">שיחת משוב והערכה</div>
+              <div style="font-size:12.5px;color:var(--neutral-500);">3–6 חודשים מקליטה, חצי שנתי עד סיום ניסיון</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="finding-card warning">
+          <div class="finding-title">4.1 — חסרי מסמכי קליטה</div>
+          <div class="finding-body">נמצאו עובדים עם מסמכי קליטה חסרים בתיק. ייתכן שלא בכל המקרים בוצעה בקרה על שלמות
+            קבלת המסמכים.</div>
+          <div class="finding-rec"><strong>המלצה 14:</strong> צירוף רשימת תיוג לכל מסמכי הקליטה + חתימת גורם בודק.</div>
+          <span class="badge badge-accepted">יטופל ב-ON-BOARDING ממוכן — 12/2025</span>
+        </div>
+        <div class="finding-card warning">
+          <div class="finding-title">4.3 — שיחות משוב לאחר קליטה</div>
+          <div class="finding-body">ב-20% מהמקרים לא תועדו שיחות משוב בשנה הראשונה. עובדת שפוטרה לא קיבלה משוב — מקרה
+            שהיה חשוב במיוחד לתעד.</div>
+          <div class="finding-rec"><strong>המלצה 16:</strong> מיכון תהליך המשוב להקלה על מעקב.</div>
+          <span class="badge badge-accepted">מקובל — צפי 12/2024</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── RETENTION ── -->
+    <section id="retention" class="section">
+      <div class="section-header">
+        <div class="section-icon">🏆</div>
+        <div>
+          <div class="section-title">שימור עובדים</div>
+          <div class="section-desc">מענקי שימור, קידום, ניוד ותיעוד סיבות עזיבה</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">מענקי קליטה ושימור לפי דירוג — 2023</div>
+        <div id="retentionRows"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">מנגנוני שימור קיימים בחברה</div>
+        <div class="grid-3">
+          <div style="padding:16px;background:var(--mekorot-sky);border-radius:var(--radius-sm);text-align:center;">
+            <div style="font-size:24px;margin-bottom:8px;">💵</div>
+            <div style="font-weight:700;font-size:13.5px;color:var(--mekorot-blue-dark);">מענקי קליטה ושימור</div>
+            <div style="font-size:12px;color:var(--neutral-500);margin-top:4px;">₪20-30K לשנה, 3–5 שנים</div>
+          </div>
+          <div style="padding:16px;background:var(--mekorot-sky);border-radius:var(--radius-sm);text-align:center;">
+            <div style="font-size:24px;margin-bottom:8px;">🎓</div>
+            <div style="font-weight:700;font-size:13.5px;color:var(--mekorot-blue-dark);">סיוע בלימודים</div>
+            <div style="font-size:12px;color:var(--neutral-500);margin-top:4px;">מותנה בהישארות לאחר הלימודים</div>
+          </div>
+          <div style="padding:16px;background:var(--mekorot-sky);border-radius:var(--radius-sm);text-align:center;">
+            <div style="font-size:24px;margin-bottom:8px;">🔄</div>
+            <div style="font-weight:700;font-size:13.5px;color:var(--mekorot-blue-dark);">ניוד פנימי וקידום</div>
+            <div style="font-size:12px;color:var(--neutral-500);margin-top:4px;">מסלולי קידום לתפקידי ניהול</div>
+          </div>
+          <div style="padding:16px;background:var(--mekorot-sky);border-radius:var(--radius-sm);text-align:center;">
+            <div style="font-size:24px;margin-bottom:8px;">⭐</div>
+            <div style="font-weight:700;font-size:13.5px;color:var(--mekorot-blue-dark);">טקסי מצטיינים</div>
+            <div style="font-size:12px;color:var(--neutral-500);margin-top:4px;">הכרה ציבורית ומענק מצוינות</div>
+          </div>
+          <div style="padding:16px;background:var(--mekorot-sky);border-radius:var(--radius-sm);text-align:center;">
+            <div style="font-size:24px;margin-bottom:8px;">💬</div>
+            <div style="font-weight:700;font-size:13.5px;color:var(--mekorot-blue-dark);">משוב שנתי</div>
+            <div style="font-size:12px;color:var(--neutral-500);margin-top:4px;">שיח מסודר על יעדים ומדדים</div>
+          </div>
+          <div
+            style="padding:16px;background:#FEF9EC;border-radius:var(--radius-sm);text-align:center;border:1px dashed var(--status-yellow);">
+            <div style="font-size:24px;margin-bottom:8px;">🏗️</div>
+            <div style="font-weight:700;font-size:13.5px;color:var(--status-orange);">ראש תחום מקצועי</div>
+            <div style="font-size:12px;color:var(--neutral-500);margin-top:4px;">מוצע — מקודם בהסכם חדש</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="finding-card warning">
+          <div class="finding-title">5.1 — מענקי שימור לא שומרים על תפקיד</div>
+          <div class="finding-body">
+            כיוון שכל מהנדסים זכאים למענק, עובד יכול לעזוב תפקיד בו יש מחסור (כגון מהנדס חשמל) לתפקיד אחר ולהמשיך לקבל
+            מענק. ההשקעה בחניכה אובדת.
+          </div>
+          <div class="finding-rec"><strong>המלצה 18:</strong> לשקול התניית חלק מהמענקים באי-ניוד מתפקידים קריטיים.</div>
+          <span class="badge badge-accepted">מקודם בהסכם הקיבוצי</span>
+        </div>
+        <div class="finding-card info">
+          <div class="finding-title">5.2 — קידום לניהול כתחליף לשימור</div>
+          <div class="finding-body">
+            בחברה מקדמים עובדים מקצועיים לניהול גם כשאינם מתאימים — כי המנהלים מרוויחים הרבה יותר. פתרון טוב יותר:
+            תפקידי "ראש תחום מקצועי" שיתוגמלו בהתאם.
+          </div>
+          <div class="finding-rec"><strong>המלצה 19:</strong> להגדיר מסלול מקצועי עצמאי עם תגמול הולם.</div>
+          <span class="badge badge-accepted">מקודם בהסכם</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── RECOMMENDATIONS ── -->
+    <section id="recommendations" class="section">
+      <div class="section-header">
+        <div class="section-icon">📋</div>
+        <div>
+          <div class="section-title">סיכום המלצות</div>
+          <div class="section-desc">20 המלצות, מצב תגובה, אחראי ויעד לביצוע</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-title">סטטוס קבלת ההמלצות</div>
+        <canvas id="statusChart" height="160"></canvas>
+      </div>
+
+      <div class="card">
+        <div class="card-title">טבלת סיכום המלצות</div>
+        <div style="overflow-x:auto;">
+          <table class="summary-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>נושא</th>
+                <th>תחום</th>
+                <th>סטטוס</th>
+                <th>יעד ביצוע</th>
+              </tr>
+            </thead>
+            <tbody id="recTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <strong>חברת מקורות — המים הלאומית</strong> | דוח ביקורת פנים — גיוס, קליטה ושימור מהנדסים ואקדמאים | אוקטובר 2024
+  </footer>
+
+  <script>
+    // ── Tab switching ──
+    function switchTab(id, el) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      el.classList.add('active');
+    }
+
+    // ── Accordion ──
+    function toggleAcc(header) {
+      const body = header.nextElementSibling;
+      header.classList.toggle('open');
+      body.classList.toggle('open');
+    }
+
+    // ── DATA ──
+    const salaryData = [
+      { name: 'תוכניתן זוטר', compMin: 6360, compAvg: 6360, marketAvg: 14180, ratio: 45 },
+      { name: 'מהנדס אלקטרוניקה זוטר', compMin: 8040, compAvg: 8040, marketAvg: 17710, ratio: 45 },
+      { name: 'מהנדס אלקטרוניקה מתקדם', compMin: 10350, compAvg: 14360, marketAvg: 27370, ratio: 52 },
+      { name: 'מהנדס מכונות זוטר', compMin: 8040, compAvg: 8050, marketAvg: 14600, ratio: 55 },
+      { name: 'מנהל פיתוח תוכנה 1', compMin: 23370, compAvg: 23370, marketAvg: 41780, ratio: 56 },
+      { name: 'מהנדס תוכנה מתקדם', compMin: 20870, compAvg: 22120, marketAvg: 31740, ratio: 70 },
+      { name: 'מהנדס מכונות מתקדם', compMin: 12470, compAvg: 16440, marketAvg: 21860, ratio: 75 },
+      { name: 'מהנדס מכונות מומחה', compMin: 16920, compAvg: 19270, marketAvg: 26020, ratio: 74 },
+      { name: 'מהנדס מערכת מנוסה', compMin: 8020, compAvg: 17790, marketAvg: 24810, ratio: 72 },
+      { name: 'מהנדס מערכת מתקדם', compMin: 17680, compAvg: 20010, marketAvg: 27360, ratio: 73 },
+      { name: 'מהנדס מערכת מומחה', compMin: 27730, compAvg: 27730, marketAvg: 35240, ratio: 79 },
+      { name: 'תוכניתן מתקדם (עם מענק)', compMin: 26471, compAvg: 26471, marketAvg: 24240, ratio: 109 },
+    ];
+
+    const retentionData = [
+      { tag: 'מהנדסים — קליטה', count: 32, avg: 25000 },
+      { tag: 'הנדסאים — קליטה', count: 24, avg: 16667 },
+      { tag: 'מנהלי — קליטה', count: 15, avg: 16000 },
+      { tag: 'מהנדסים — שימור', count: 15, avg: 30000 },
+      { tag: 'הנדסאים — שימור', count: 8, avg: 30000 },
+      { tag: 'הסכם מיוחד — שימור', count: 3, avg: 30000 },
+      { tag: 'מנהלי — שימור', count: 4, avg: 30000 },
+    ];
+
+    const recData = [
+      { n: 1, text: 'תהליך גיוס מסודר ומתועד', area: 'גיוס', status: 'accepted', target: 'Q2 2025' },
+      { n: 2, text: 'בחינת גיוס מרכזי למשרות תדירות', area: 'גיוס', status: 'partial', target: 'Q2 2025' },
+      { n: 3, text: 'בקרה על גיוס מקביל במרחבים', area: 'גיוס', status: 'accepted', target: 'Q2 2025' },
+      { n: 4, text: 'חישוב מדדים באופן ממוכן', area: 'גיוס', status: 'accepted', target: 'Q2 2025' },
+      { n: 5, text: 'תיעוד שיקולי בחירת מועמד', area: 'גיוס', status: 'accepted', target: 'Q2 2025' },
+      { n: 6, text: 'אבחון חובה למשרות עם כישורים ייחודיים', area: 'גיוס', status: 'rejected', target: '—' },
+      { n: 7, text: 'מיפוי משרות עם קושי בגיוס איכותי', area: 'שכר', status: 'accepted', target: 'מתמשך' },
+      { n: 8, text: 'עדכון שכר לתחומי ליבה בהסכם הקיבוצי', area: 'שכר', status: 'accepted', target: 'הסכם' },
+      { n: 9, text: 'פרסום ממוקד למשרות קשות', area: 'פרסום', status: 'partial', target: '3/2025' },
+      { n: 10, text: 'פרסום משרות בלינקדאין JOBS', area: 'פרסום', status: 'accepted', target: 'מיידי' },
+      { n: 11, text: 'תמריץ לעובדים לקידום משרות בלינקדאין', area: 'פרסום', status: 'partial', target: 'מאוחר' },
+      { n: 12, text: 'תיעוד אמצעי פרסום לכל מועמד', area: 'פרסום', status: 'accepted', target: '3/2025' },
+      { n: 13, text: 'הרחבת "חבר מביא חבר"', area: 'פרסום', status: 'accepted', target: '11/2024' },
+      { n: 14, text: 'רשימת תיוג מסמכי קליטה', area: 'קליטה', status: 'accepted', target: '12/2025' },
+      { n: 15, text: 'מעקב הדוק אחר תוכנית חפיפה', area: 'קליטה', status: 'accepted', target: 'מיידי' },
+      { n: 16, text: 'מיכון תהליך משוב עובדים', area: 'קליטה', status: 'accepted', target: '12/2024' },
+      { n: 17, text: 'משוב בסיום חפיפה', area: 'קליטה', status: 'partial', target: '3/2025' },
+      { n: 18, text: 'התניית מענקי שימור בתפקיד ספציפי', area: 'שימור', status: 'accepted', target: 'הסכם' },
+      { n: 19, text: 'הגדרת תפקידי ראש תחום מקצועי', area: 'שימור', status: 'accepted', target: 'הסכם' },
+      { n: 20, text: 'שיפור תשאול עובדים עוזבים', area: 'שימור', status: 'partial', target: 'מתמשך' },
+    ];
+
+    // ── Render salary table ──
+    const tbody = document.getElementById('salaryTableBody');
+    salaryData.forEach(d => {
+      const ratioClass = d.ratio >= 90 ? 'ratio-ok' : d.ratio >= 70 ? 'ratio-mid' : 'ratio-low';
+      const barW = Math.min(d.ratio, 120);
+      tbody.innerHTML += `
+    <tr>
+      <td style="font-weight:600">${d.name}</td>
+      <td>₪${d.compMin.toLocaleString()}</td>
+      <td>₪${d.compAvg.toLocaleString()}</td>
+      <td>₪${d.marketAvg.toLocaleString()}</td>
+      <td>
+        <div class="ratio-bar">
+          <div class="ratio-fill" style="width:${barW}px; background: ${d.ratio >= 90 ? '#27AE60' : d.ratio >= 70 ? '#F39C12' : '#E74C3C'}"></div>
+          <span class="ratio-num ${ratioClass}">${d.ratio}%</span>
+        </div>
+      </td>
+    </tr>`;
+    });
+
+    // ── Render retention rows ──
+    const maxCount = Math.max(...retentionData.map(r => r.count));
+    const rDiv = document.getElementById('retentionRows');
+    retentionData.forEach(r => {
+      rDiv.innerHTML += `
+    <div class="retention-row">
+      <span class="retention-tag">${r.tag}</span>
+      <span class="retention-count">${r.count}</span>
+      <div class="retention-bar"><div class="retention-fill" style="width:${(r.count / maxCount) * 100}%"></div></div>
+      <span class="retention-avg">₪${r.avg.toLocaleString()} לשנה</span>
+    </div>`;
+    });
+
+    // ── Render rec table ──
+    const recBody = document.getElementById('recTableBody');
+    const statusMap = { accepted: ['badge-accepted', 'מקובל'], partial: ['badge-partial', 'מקובל חלקית'], rejected: ['badge-rejected', 'לא מקובל'] };
+    recData.forEach(r => {
+      const [cls, lbl] = statusMap[r.status];
+      recBody.innerHTML += `
+    <tr>
+      <td style="font-weight:700;color:var(--mekorot-blue)">${r.n}</td>
+      <td>${r.text}</td>
+      <td><span class="tag-section">${r.area}</span></td>
+      <td><span class="badge ${cls}">${lbl}</span></td>
+      <td style="color:var(--neutral-500);font-size:12.5px">${r.target}</td>
+    </tr>`;
+    });
+
+    // ── CHARTS ──
+    Chart.defaults.font.family = 'Assistant';
+    Chart.defaults.font.size = 12;
+
+    // Staff pie
+    new Chart(document.getElementById('staffChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['מהנדסים ואקדמאים', 'שאר העובדים'],
+        datasets: [{ data: [440, 1060], backgroundColor: ['#1A5EA8', '#D6E8F7'], borderWidth: 0, hoverOffset: 6 }]
+      },
+      options: {
+        cutout: '70%',
+        plugins: {
+          legend: { position: 'bottom', labels: { font: { size: 13 }, padding: 12 } },
+          tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed} עובדים` } }
+        }
+      }
+    });
+
+    // Grants bar
+    new Chart(document.getElementById('grantChart'), {
+      type: 'bar',
+      data: {
+        labels: ['מהנדסים\nקליטה', 'הנדסאים\nקליטה', 'מנהלי\nקליטה', 'מהנדסים\nשימור', 'הנדסאים\nשימור', 'מנהלי\nשימור'],
+        datasets: [
+          { label: 'מס׳ מקבלים', data: [32, 24, 15, 15, 8, 4], backgroundColor: '#1A5EA8', borderRadius: 4, yAxisID: 'y' },
+          { label: 'ממוצע מענק (₪)', data: [25000, 16667, 16000, 30000, 30000, 30000], backgroundColor: 'rgba(0,153,204,0.25)', borderColor: '#0099CC', borderWidth: 2, borderRadius: 4, yAxisID: 'y1', type: 'line' }
+        ]
+      },
+      options: {
+        plugins: { legend: { position: 'bottom', labels: { font: { size: 12 }, padding: 10 } } },
+        scales: {
+          y: { beginAtZero: true, title: { display: true, text: 'מס׳ מקבלים' } },
+          y1: { beginAtZero: true, position: 'left', title: { display: true, text: '₪ לשנה' }, grid: { drawOnChartArea: false } }
+        }
+      }
+    });
+
+    // Salary ratio chart (horizontal bar)
+    const sorted = [...salaryData].sort((a, b) => a.ratio - b.ratio);
+    new Chart(document.getElementById('salaryRatioChart'), {
+      type: 'bar',
+      data: {
+        labels: sorted.map(d => d.name),
+        datasets: [{
+          label: 'יחס שכר מחברה לשוק (%)',
+          data: sorted.map(d => d.ratio),
+          backgroundColor: sorted.map(d => d.ratio >= 90 ? '#27AE60' : d.ratio >= 70 ? '#F39C12' : '#E74C3C'),
+          borderRadius: 4,
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.x}% מהשוק` } }
+        },
+        scales: {
+          x: { min: 0, max: 120, ticks: { callback: v => v + '%' }, grid: { color: 'rgba(0,0,0,0.05)' } },
+          y: { ticks: { font: { size: 11 } } }
+        }
+      }
+    });
+
+    // Status pie
+    const accepted = recData.filter(r => r.status === 'accepted').length;
+    const partial = recData.filter(r => r.status === 'partial').length;
+    const rejected = recData.filter(r => r.status === 'rejected').length;
+    new Chart(document.getElementById('statusChart'), {
+      type: 'doughnut',
+      data: {
+        labels: [`מקובל (${accepted})`, `מקובל חלקית (${partial})`, `לא מקובל (${rejected})`],
+        datasets: [{ data: [accepted, partial, rejected], backgroundColor: ['#27AE60', '#F39C12', '#E74C3C'], borderWidth: 0, hoverOffset: 6 }]
+      },
+      options: {
+        cutout: '65%',
+        plugins: { legend: { position: 'right', labels: { font: { size: 13 }, padding: 14 } } }
+      }
+    });
+  </script>
+</body>
+
+</html>
