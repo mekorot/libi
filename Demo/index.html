@@ -96,8 +96,21 @@
     <div class="messages" id="messages">
       <img src="wave-bg.png">
     </div>
-    <div class="input-area">
-      <div class="input-wrap">
+    <div class="input-area" style="position:relative;overflow:hidden;">
+      <img src="wave-bg.png" aria-hidden="true" style="
+        position:absolute;
+        bottom:0;
+        left:0;
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        object-position:bottom;
+        opacity:0.07;
+        pointer-events:none;
+        z-index:0;
+        user-select:none;
+      ">
+      <div class="input-wrap" style="position:relative;z-index:1;">
         <button class="attach-btn" title="צרף קובץ"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path
@@ -118,7 +131,8 @@
 
 
       </div>
-      <div class="input-hint">הסוכן עלול לטעות. אנא אמת מידע קריטי מול מערכות מקורות הרשמיות.</div>
+      <div class="input-hint" style="position:relative;z-index:1;">הסוכן עלול לטעות. אנא אמת מידע קריטי מול מערכות
+        מקורות הרשמיות.</div>
     </div>
   </main>
   <script src="scripts.js"></script>
