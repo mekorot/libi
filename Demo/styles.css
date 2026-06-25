@@ -553,10 +553,11 @@ body {
   border: 1px solid var(--border-mid);
   border-radius: var(--radius-lg);
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   gap: 8px;
   padding: 10px 12px;
   transition: border-color 0.2s;
+  line-height: 3;
 }
 
 .input-wrap:focus-within {
