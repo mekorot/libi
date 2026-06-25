@@ -126,7 +126,7 @@
         "id": "word-export",
         "icon": "upload",
         "label": "מייצרת קובץ Word",
-        "ms": 1400,
+        "ms": 1401,
         "desc": "InterimReport.docx · 2.3 MB"
       }
     ],
