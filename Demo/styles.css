@@ -7,21 +7,21 @@
 }
 
 :root {
-  --mekorot-blue: #0057A8;
-  --mekorot-blue-dark: #003F7D;
-  --mekorot-blue-mid: #1A6FBF;
-  --mekorot-blue-light: #E6F2FB;
-  --mekorot-blue-pale: #F0F7FD;
+  --mekorot-blue: #1E5ECC;
+  --mekorot-blue-dark: #0D1F4E;
+  --mekorot-blue-mid: #1448A3;
+  --mekorot-blue-light: #E8F0FB;
+  --mekorot-blue-pale: #F0F5FD;
   --mekorot-aqua: #00A8C8;
   --mekorot-aqua-light: #E0F6FB;
   --mekorot-teal: #007E9B;
 
   --bg: #ffffff;
-  --bg-secondary: #F4F8FC;
-  --bg-tertiary: #EBF3FA;
+  --bg-secondary: #F0F5FD;
+  --bg-tertiary: #F4F7FC;
   --text: #0D1B2A;
   --text-secondary: #3D5166;
-  --text-tertiary: #8BA3B8;
+  --text-tertiary: #7A93B8;
   --border: rgba(0, 87, 168, 0.1);
   --border-mid: rgba(0, 87, 168, 0.18);
 
@@ -44,7 +44,7 @@
   --radius-md: 12px;
   --radius-lg: 18px;
   --sidebar-w: 272px;
-  --font: 'Rubik', 'Segoe UI', Arial, sans-serif;
+  --font: 'Noto Sans Hebrew', 'Segoe UI', Arial, sans-serif;
 }
 
 body {
@@ -241,7 +241,7 @@ body {
 /* Water stripe accent at top */
 .water-stripe {
   height: 3px;
-  background: linear-gradient(90deg, var(--mekorot-blue) 0%, var(--mekorot-aqua) 100%);
+  background: var(--mekorot-blue);
   flex-shrink: 0;
 }
 
@@ -467,7 +467,7 @@ body {
 
 .progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, var(--mekorot-blue), var(--mekorot-aqua));
+  background: var(--mekorot-blue);
   border-radius: 2px;
   width: 0%;
   transition: width linear;
@@ -817,6 +817,49 @@ hr.divider {
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-} 
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* UX/UI Guideline Compliance Patch */
+.nav-item.active {
+  background: #E8F0FB;
+  color: #1E5ECC;
+  border-right: 3px solid #1E5ECC;
+}
+
+.tool-block,
+.msg-bubble,
+.input-wrap {
+  box-shadow: 0 2px 8px rgba(13, 31, 78, 0.06);
+}
+
+.icon-btn,
+.attach-btn,
+.send-btn {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+button:focus-visible,
+.nav-item:focus-visible,
+.doc-link:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #1E5ECC;
+  outline-offset: 2px;
+}
+
+.progress-bar {
+  background: #1E5ECC;
+}
+
+.typing-dot {
+  background: #1E5ECC;
+}
