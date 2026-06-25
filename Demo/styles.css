@@ -1,3 +1,14 @@
+/* ============================================================
+   MEKOROT LIBI — Design System CSS
+   Brand-aligned: Mekorot Official Palette
+   --mekorot-blue:       #1E5ECC  (primary)
+   --mekorot-blue-dark:  #0D1F4E  (header / dark)
+   --mekorot-blue-mid:   #1448A3  (hover only)
+   --mekorot-blue-light: #E8F0FB  (cards / icon containers)
+   --page-bg:            #F4F7FC  (page background)
+   No gradients. No backdrop-filter. Shadows: rgba(13,31,78,0.06–0.12)
+   ============================================================ */
+
 *,
 *::before,
 *::after {
@@ -11,32 +22,32 @@
   --mekorot-blue-dark: #0D1F4E;
   --mekorot-blue-mid: #1448A3;
   --mekorot-blue-light: #E8F0FB;
-  --mekorot-blue-pale: #F0F5FD;
-  --mekorot-aqua: #00A8C8;
-  --mekorot-aqua-light: #E0F6FB;
-  --mekorot-teal: #007E9B;
+  --mekorot-blue-pale: #F4F7FC;
+  --mekorot-aqua: #1E5ECC;
+  --mekorot-aqua-light: #E8F0FB;
+  --mekorot-teal: #1E5ECC;
 
-  --bg: #ffffff;
-  --bg-secondary: #F0F5FD;
+  --bg: #E2E6EC;
+  --bg-secondary: #F4F7FC;
   --bg-tertiary: #F4F7FC;
   --text: #0D1B2A;
   --text-secondary: #3D5166;
   --text-tertiary: #7A93B8;
-  --border: rgba(0, 87, 168, 0.1);
-  --border-mid: rgba(0, 87, 168, 0.18);
+  --border: rgba(30, 94, 204, 0.1);
+  --border-mid: rgba(30, 94, 204, 0.18);
 
-  --agent-bg: #F4F8FC;
-  --user-bg: #0057A8;
+  --agent-bg: #F4F7FC;
+  --user-bg: #1E5ECC;
   --user-text: #ffffff;
 
-  --tag-run-bg: #E6F2FB;
-  --tag-run-text: #0057A8;
+  --tag-run-bg: #E8F0FB;
+  --tag-run-text: #1E5ECC;
   --tag-done-bg: #E0F6F0;
   --tag-done-text: #006B4B;
   --tag-wait-bg: #FFF3E0;
   --tag-wait-text: #8C5200;
 
-  --success: #00A36C;
+  --success: #1E5ECC;
   --warning: #F59E0B;
   --danger: #DC2626;
 
@@ -523,7 +534,7 @@ body {
   gap: 6px;
   padding: 4px 10px;
   background: var(--mekorot-blue-light);
-  border: 1px solid rgba(0, 87, 168, 0.15);
+  border: 1px solid rgba(30, 94, 204, 0.15);
   border-radius: 20px;
   font-size: 12px;
   color: var(--mekorot-blue);
@@ -670,7 +681,7 @@ body {
 
 code {
   background: var(--mekorot-blue-light);
-  border: 1px solid rgba(0, 87, 168, 0.15);
+  border: 1px solid rgba(30, 94, 204, 0.15);
   border-radius: 4px;
   padding: 1px 5px;
   font-size: 12px;
@@ -799,14 +810,14 @@ hr.divider {
   text-underline-offset: 2px;
   padding: 3px 8px 3px 6px;
   background: var(--mekorot-blue-light);
-  border: 1px solid rgba(0, 87, 168, 0.2);
+  border: 1px solid rgba(30, 94, 204, 0.2);
   border-radius: 6px;
   transition: background 0.15s, color 0.15s;
   cursor: pointer;
 }
 
 .doc-link:hover {
-  background: rgba(0, 87, 168, 0.14);
+  background: rgba(30, 94, 204, 0.12);
   color: var(--mekorot-blue-dark);
   text-decoration: underline;
 }
@@ -865,33 +876,7 @@ textarea:focus-visible {
   background: #1E5ECC;
 }
 
-/* ===== GLOBAL THEME ALIGNMENT ===== */
-:root {
-  --mekorot-blue: #034EA2;
-  --mekorot-blue-dark: #032A61;
-  --mekorot-blue-light: #E6F0FB;
-
-  --bg: #E2E6EC;
-  /* MAIN background */
-  --bg-secondary: #FDFDFD;
-  /* sidebar + cards */
-  --bg-tertiary: #F4F7FC;
-
-  --text: #0D1B2A;
-  --text-secondary: #3D5166;
-  --text-tertiary: #656D82;
-
-  --border: rgba(3, 42, 97, 0.12);
-  --border-mid: rgba(3, 42, 97, 0.15);
-
-  --agent-bg: #F4F8FC;
-  --user-bg: #0057A8;
-
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 18px;
-}
-
+/* brand alignment applied — override block removed */
 /* ===== BODY ===== */
 body {
   background: var(--bg);
@@ -916,25 +901,23 @@ body {
 /* ===== TOP BAR ===== */
 .top-bar {
   background: var(--mekorot-blue-dark);
-  color: #C7DCFF;
-  box-shadow:
-    0 2px 2px rgba(3, 42, 97, 0.3),
-    0 2px 8px rgba(3, 42, 97, 0.18);
+  color: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 2px 8px rgba(13, 31, 78, 0.12);
 }
 
 .top-bar-title {
-  color: #C7DCFF;
+  color: rgba(255, 255, 255, 0.75);
   font-weight: 700;
 }
 
 .top-bar-sub {
-  color: rgba(199, 220, 255, 0.55);
+  color: rgba(255, 255, 255, 0.50);
 }
 
 /* buttons in header */
 .top-bar .icon-btn {
-  border: 1px solid rgba(199, 220, 255, 0.2);
-  color: #C7DCFF;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .top-bar .icon-btn:hover {
@@ -985,7 +968,7 @@ body {
 /* ===== PRIMARY BUTTON STYLE ===== */
 button.primary,
 .btn-primary {
-  background: #034EA2;
+  background: #1E5ECC;
   color: white;
   font-weight: 700;
   border-radius: 8px;
@@ -1005,14 +988,14 @@ button.primary:hover {
 }
 
 .nav-item.active {
-  background: #E6F0FB;
-  border-right: 3px solid #034EA2;
+  background: #E8F0FB;
+  border-right: 3px solid #1E5ECC;
   font-weight: 600;
 }
 
 /* ===== AVATAR ===== */
 .avatar-sm {
-  background: rgba(3, 42, 97, 0.1);
+  background: rgba(13, 31, 78, 0.06);
   font-weight: 700;
 }
 
@@ -1032,7 +1015,7 @@ button.primary:hover {
   height: 52px;
   border-radius: 16px;
 
-  background: #E6EAF0;
+  background: #E8F0FB;
   /* soft gray-blue */
 
   display: flex;
@@ -1046,7 +1029,7 @@ button.primary:hover {
   height: 36px;
   border-radius: 12px;
 
-  background: #DCE6F7;
+  background: #E8F0FB;
   /* inner slightly blue */
 
   display: flex;
@@ -1057,24 +1040,24 @@ button.primary:hover {
   cursor: pointer;
 
   transition: all 0.15s ease;
-  color: #748cb3;
+  color: #1E5ECC;
 }
 
 .send-btn svg {
-  stroke: #748cb3;
+  stroke: #1E5ECC;
 }
 
 /* icon */
 .send-btn .icon {
   width: 18px;
   height: 18px;
-  stroke: #034EA2;
+  stroke: #1E5ECC;
   /* mekorot blue */
 }
 
 /* hover (enabled only) */
 .send-btn:not(:disabled):hover {
-  background: #CFE0FA;
+  background: #E8F0FB;
   transform: scale(1.05);
 }
 
