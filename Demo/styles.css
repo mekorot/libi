@@ -817,44 +817,51 @@ hr.divider {
 }
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-} 
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 /* UX/UI Guideline Compliance Patch */
-.nav-item.active{
-  background:#E8F0FB;
-  color:#1E5ECC;
-  border-right:3px solid #1E5ECC;
+.nav-item.active {
+  background: #E8F0FB;
+  color: #1E5ECC;
+  border-right: 3px solid #1E5ECC;
 }
 
 .tool-block,
 .msg-bubble,
-.input-wrap{
-  box-shadow:0 2px 8px rgba(13,31,78,0.06);
+.input-wrap {
+  box-shadow: 0 2px 8px rgba(13, 31, 78, 0.06);
 }
 
 .icon-btn,
 .attach-btn,
-.send-btn{
-  min-width:44px;
-  min-height:44px;
+.send-btn {
+  min-width: 44px;
+  min-height: 44px;
 }
 
 button:focus-visible,
 .nav-item:focus-visible,
 .doc-link:focus-visible,
-textarea:focus-visible{
-  outline:2px solid #1E5ECC;
-  outline-offset:2px;
+textarea:focus-visible {
+  outline: 2px solid #1E5ECC;
+  outline-offset: 2px;
 }
 
-.progress-bar{
-  background:#1E5ECC;
+.progress-bar {
+  background: #1E5ECC;
 }
 
-.typing-dot{
-  background:#1E5ECC;
+.typing-dot {
+  background: #1E5ECC;
 }
 
 /* ===== GLOBAL THEME ALIGNMENT ===== */
@@ -863,8 +870,10 @@ textarea:focus-visible{
   --mekorot-blue-dark: #032A61;
   --mekorot-blue-light: #E6F0FB;
 
-  --bg: #E2E6EC;              /* MAIN background */
-  --bg-secondary: #FDFDFD;    /* sidebar + cards */
+  --bg: #E2E6EC;
+  /* MAIN background */
+  --bg-secondary: #FDFDFD;
+  /* sidebar + cards */
   --bg-tertiary: #F4F7FC;
 
   --text: #0D1B2A;
@@ -889,11 +898,13 @@ body {
 
 /* ===== SIDEBAR ===== */
 .sidebar {
-  background: var(--bg-secondary); /* white like design */
+  background: var(--bg-secondary);
+  /* white like design */
 }
 
 .logo-name {
-  font-weight: 700; /* stronger like Figma */
+  font-weight: 700;
+  /* stronger like Figma */
 }
 
 /* ===== MAIN ===== */
@@ -906,8 +917,8 @@ body {
   background: var(--mekorot-blue-dark);
   color: #C7DCFF;
   box-shadow:
-    0 2px 2px rgba(3,42,97,0.3),
-    0 2px 8px rgba(3,42,97,0.18);
+    0 2px 2px rgba(3, 42, 97, 0.3),
+    0 2px 8px rgba(3, 42, 97, 0.18);
 }
 
 .top-bar-title {
@@ -916,17 +927,17 @@ body {
 }
 
 .top-bar-sub {
-  color: rgba(199,220,255,0.55);
+  color: rgba(199, 220, 255, 0.55);
 }
 
 /* buttons in header */
 .top-bar .icon-btn {
-  border: 1px solid rgba(199,220,255,0.2);
+  border: 1px solid rgba(199, 220, 255, 0.2);
   color: #C7DCFF;
 }
 
 .top-bar .icon-btn:hover {
-  background: rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 /* ===== MESSAGE AREA BG ===== */
@@ -1000,7 +1011,7 @@ button.primary:hover {
 
 /* ===== AVATAR ===== */
 .avatar-sm {
-  background: rgba(3,42,97,0.1);
+  background: rgba(3, 42, 97, 0.1);
   font-weight: 700;
 }
 
@@ -1010,6 +1021,74 @@ button.primary:hover {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.15);
+  background: rgba(0, 0, 0, 0.15);
   border-radius: 3px;
+}
+
+/* OUTER pill (light background container) */
+.send-btn-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+
+  background: #E6EAF0;
+  /* soft gray-blue */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* INNER button */
+.send-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+
+  background: #DCE6F7;
+  /* inner slightly blue */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  cursor: pointer;
+
+  transition: all 0.15s ease;
+  color: #748cb3;
+}
+
+.send-btn svg {
+  stroke: #748cb3;
+}
+
+/* icon */
+.send-btn .icon {
+  width: 18px;
+  height: 18px;
+  stroke: #034EA2;
+  /* mekorot blue */
+}
+
+/* hover (enabled only) */
+.send-btn:not(:disabled):hover {
+  background: #CFE0FA;
+  transform: scale(1.05);
+}
+
+/* active */
+.send-btn:not(:disabled):active {
+  transform: scale(0.95);
+}
+
+/* disabled (like image subtle) */
+.send-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* OPTIONAL: subtle depth like design */
+.send-btn-wrap {
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
