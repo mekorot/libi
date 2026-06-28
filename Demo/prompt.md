@@ -1,1 +1,1 @@
-topBarTitle and navActiveLabel should be run typing animation
+המו.היי ליבי, אני רוצה להתחיל בבקשה ביקורת בנושא קליטת עובדים חדשים בארגון

@@ -4,8 +4,8 @@
 const FLOW_URL = 'flow.json';
 
 // Each user-triggered step in the flow requires typing this exact phrase.
-const START_PHRASE = 'היי ליבי, אני רוצה להתחיל בבקשה ביקורת בנושא קליטת עובדים חדשים בארגון';
-const CONFIRM_PHRASE = 'תודה, אפשר להתקדם לדוח המסכם';
+const START_PHRASE   = 'היי ליבי, אני רוצה להתחיל בבקשה ביקורת בנושא קליטת עובדים חדשים בארגון. בביקורת אני מתכננת להתמקד בנושא נהלי החברה, כללי הרגולציה והחוקים השונים.';
+const CONFIRM_PHRASE = 'תבדקי איך החברה מיישמת האמור לעיל במסגרת הליך גיוס עובדים, פרסום משרות והליך קליטה. לסיכום הציגי דוח ביניים בפורמט וורד לפי הנהוג בחברה.';
 
 /* ─────────────────────────────────────────────
    Utilities
@@ -43,8 +43,8 @@ function downloadDoc(fname, src) {
         })
         .then(blob => {
             const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
+            const a   = document.createElement('a');
+            a.href     = url;
             a.download = fname;
             document.body.appendChild(a);
             a.click();
@@ -55,11 +55,11 @@ function downloadDoc(fname, src) {
             // fetch failed (e.g. file:// protocol or network error) —
             // fall back to a direct anchor download before giving up.
             try {
-                const a = document.createElement('a');
-                a.href = src;
+                const a   = document.createElement('a');
+                a.href     = src;
                 a.download = fname;
-                a.target = '_blank';
-                a.rel = 'noopener';
+                a.target   = '_blank';
+                a.rel      = 'noopener';
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -97,9 +97,9 @@ function renderText(raw) {
     </svg>`;
 
     const DOCX_FILE_MAP = {
-        'InterimReport.docx': 'InterimReport.docx',
-        'SummeryReport.docx': 'SummeryReport.docx',
-        'summeryReport.docx': 'SummeryReport.docx'   // flow.json uses lowercase-s variant
+        'InterimReport.docx':  'InterimReport.docx',
+        'SummeryReport.docx':  'SummeryReport.docx',
+        'summeryReport.docx':  'SummeryReport.docx'   // flow.json uses lowercase-s variant
     };
 
     return raw
@@ -244,11 +244,11 @@ function iconSvg(name) {
 ───────────────────────────────────────────── */
 async function runToolBlock(toolEl, tool) {
     const statusEl = toolEl.querySelector('.tool-status');
-    const barEl = toolEl.querySelector('.progress-bar');
-    const durEl = toolEl.querySelector('.tool-dur');
+    const barEl    = toolEl.querySelector('.progress-bar');
+    const durEl    = toolEl.querySelector('.tool-dur');
 
     statusEl.textContent = 'מעבד...';
-    statusEl.className = 'tool-status running';
+    statusEl.className   = 'tool-status running';
 
     if (barEl) {
         barEl.style.transition = `width ${tool.ms}ms linear`;
@@ -258,7 +258,7 @@ async function runToolBlock(toolEl, tool) {
     await sleep(tool.ms);
 
     statusEl.textContent = 'הושלם';
-    statusEl.className = 'tool-status done';
+    statusEl.className   = 'tool-status done';
     if (durEl) durEl.textContent = (tool.ms / 1000).toFixed(1) + 'ש';
 }
 
@@ -314,7 +314,25 @@ async function playAgentMessage(msg) {
 
     const textEl = document.getElementById(bid);
     textEl.style.transition = 'opacity 0.35s';
-    textEl.innerHTML = renderText(msg.text);
+    let html = renderText(msg.text);
+    if (msg.reportLink) {
+        html += `<div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(0,0,0,0.08)">
+          <a href="${msg.reportLink.url}" target="_blank" rel="noopener"
+             style="display:inline-flex;align-items:center;gap:7px;
+                    color:var(--mekorot-blue,#1a56a0);font-weight:600;font-size:13px;
+                    text-decoration:none;background:rgba(26,86,160,0.07);
+                    padding:8px 14px;border-radius:8px;
+                    border:1px solid rgba(26,86,160,0.18)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            ${esc(msg.reportLink.caption)}
+          </a>
+        </div>`;
+    }
+    textEl.innerHTML = html;
     requestAnimationFrame(() => requestAnimationFrame(() => textEl.style.opacity = '1'));
     document.getElementById('messages').scrollTop = 99999;
 }
@@ -325,9 +343,9 @@ async function playUserMessage(msg) {
         attachHtml = `<div class="file-pill">${iconSvg('file-text')} ${esc(msg.attachment)}</div>`;
     }
     appendRow(`<div class="message-row user">
-    <div class="msg-avatar user-av">עק</div>
+    <div class="msg-avatar user-av">ימ</div>
     <div class="msg-body" style="display:flex;flex-direction:column;align-items:flex-start">
-      <div class="msg-name" style="justify-content:flex-start">עודד קלר</div>
+      <div class="msg-name" style="justify-content:flex-start">יפעת מלכא</div>
       ${attachHtml}
       <div class="msg-bubble">${esc(msg.text)}</div>
     </div>
@@ -338,8 +356,8 @@ async function playUserMessage(msg) {
 /* ─────────────────────────────────────────────
    Flow state
 ───────────────────────────────────────────── */
-let running = false;
-let flowStarted = false;  // true once the flow has been kicked off
+let running        = false;
+let flowStarted    = false;  // true once the flow has been kicked off
 let waitingForUser = false;  // true while paused at the mid-flow gate
 let remainingSteps = [];     // steps queued after the mid-flow gate
 
@@ -356,7 +374,7 @@ async function playSteps(steps) {
         if (step.type === 'user' && step.text === CONFIRM_PHRASE) {
             remainingSteps = steps.slice(i + 1);   // skip the scripted user step
             waitingForUser = true;
-            running = false;
+            running        = false;
             return;                                // halt — resumed by sendMessage()
         }
 
@@ -378,7 +396,7 @@ async function runFlow() {
     // Full reset
     waitingForUser = false;
     remainingSteps = [];
-    flowStarted = true;
+    flowStarted    = true;
 
     const msgs = document.getElementById('messages');
     msgs.innerHTML = '';
@@ -398,7 +416,7 @@ async function runFlow() {
     // ── Populate title elements now that the flow has actually started ──
     const title = flow.title || '';
     typeText(document.getElementById('topBarTitle'), title);
-    document.getElementById('topBarSub').textContent = 'סוכן מקורות · פעיל';
+    document.getElementById('topBarSub').textContent     = 'סוכן מקורות · פעיל';
     const navLabel = document.getElementById('navActiveLabel');
     if (navLabel) {
         requestAnimationFrame(() => requestAnimationFrame(() => navLabel.classList.add('visible')));
@@ -425,7 +443,7 @@ function showIdleState() {
           ליבי מוכנה לסייע לך בביצוע ביקורת הפנים
         </p>
         <p style="font-size:12px;color:var(--text-tertiary)">
-          שלח הודעה כדי להתחיל את השיחה
+          שלחי הודעה לליבי
         </p>
       </div>`;
 }
@@ -477,3 +495,4 @@ async function sendMessage() {
    Boot  — show idle state, wait for user input
 ───────────────────────────────────────────── */
 showIdleState();
+ 
