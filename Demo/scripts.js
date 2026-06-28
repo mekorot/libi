@@ -4,7 +4,7 @@
 const FLOW_URL = 'flow.json';
 
 // Each user-triggered step in the flow requires typing this exact phrase.
-const START_PHRASE   = 'היי ליבי, אני רוצה להתחיל בבקשה ביקורת בנושא קליטת עובדים חדשים בארגון';
+const START_PHRASE = 'היי ליבי, אני רוצה להתחיל בבקשה ביקורת בנושא קליטת עובדים חדשים בארגון';
 const CONFIRM_PHRASE = 'תודה, אפשר להתקדם לדוח המסכם';
 
 /* ─────────────────────────────────────────────
@@ -14,6 +14,20 @@ function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 function esc(t) {
     return t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/**
+ * Typing animation — writes `text` character-by-character into `el`.
+ * @param {HTMLElement} el   - Target element
+ * @param {string}      text - Text to type
+ * @param {number}      [speed=55] - Ms per character
+ */
+async function typeText(el, text, speed = 55) {
+    el.textContent = '';
+    for (const char of text) {
+        el.textContent += char;
+        await sleep(speed);
+    }
 }
 
 /* ─────────────────────────────────────────────
@@ -29,8 +43,8 @@ function downloadDoc(fname, src) {
         })
         .then(blob => {
             const url = URL.createObjectURL(blob);
-            const a   = document.createElement('a');
-            a.href     = url;
+            const a = document.createElement('a');
+            a.href = url;
             a.download = fname;
             document.body.appendChild(a);
             a.click();
@@ -41,11 +55,11 @@ function downloadDoc(fname, src) {
             // fetch failed (e.g. file:// protocol or network error) —
             // fall back to a direct anchor download before giving up.
             try {
-                const a   = document.createElement('a');
-                a.href     = src;
+                const a = document.createElement('a');
+                a.href = src;
                 a.download = fname;
-                a.target   = '_blank';
-                a.rel      = 'noopener';
+                a.target = '_blank';
+                a.rel = 'noopener';
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -83,9 +97,9 @@ function renderText(raw) {
     </svg>`;
 
     const DOCX_FILE_MAP = {
-        'InterimReport.docx':  'InterimReport.docx',
-        'SummeryReport.docx':  'SummeryReport.docx',
-        'summeryReport.docx':  'SummeryReport.docx'   // flow.json uses lowercase-s variant
+        'InterimReport.docx': 'InterimReport.docx',
+        'SummeryReport.docx': 'SummeryReport.docx',
+        'summeryReport.docx': 'SummeryReport.docx'   // flow.json uses lowercase-s variant
     };
 
     return raw
@@ -230,11 +244,11 @@ function iconSvg(name) {
 ───────────────────────────────────────────── */
 async function runToolBlock(toolEl, tool) {
     const statusEl = toolEl.querySelector('.tool-status');
-    const barEl    = toolEl.querySelector('.progress-bar');
-    const durEl    = toolEl.querySelector('.tool-dur');
+    const barEl = toolEl.querySelector('.progress-bar');
+    const durEl = toolEl.querySelector('.tool-dur');
 
     statusEl.textContent = 'מעבד...';
-    statusEl.className   = 'tool-status running';
+    statusEl.className = 'tool-status running';
 
     if (barEl) {
         barEl.style.transition = `width ${tool.ms}ms linear`;
@@ -244,7 +258,7 @@ async function runToolBlock(toolEl, tool) {
     await sleep(tool.ms);
 
     statusEl.textContent = 'הושלם';
-    statusEl.className   = 'tool-status done';
+    statusEl.className = 'tool-status done';
     if (durEl) durEl.textContent = (tool.ms / 1000).toFixed(1) + 'ש';
 }
 
@@ -324,8 +338,8 @@ async function playUserMessage(msg) {
 /* ─────────────────────────────────────────────
    Flow state
 ───────────────────────────────────────────── */
-let running        = false;
-let flowStarted    = false;  // true once the flow has been kicked off
+let running = false;
+let flowStarted = false;  // true once the flow has been kicked off
 let waitingForUser = false;  // true while paused at the mid-flow gate
 let remainingSteps = [];     // steps queued after the mid-flow gate
 
@@ -342,7 +356,7 @@ async function playSteps(steps) {
         if (step.type === 'user' && step.text === CONFIRM_PHRASE) {
             remainingSteps = steps.slice(i + 1);   // skip the scripted user step
             waitingForUser = true;
-            running        = false;
+            running = false;
             return;                                // halt — resumed by sendMessage()
         }
 
@@ -364,7 +378,7 @@ async function runFlow() {
     // Full reset
     waitingForUser = false;
     remainingSteps = [];
-    flowStarted    = true;
+    flowStarted = true;
 
     const msgs = document.getElementById('messages');
     msgs.innerHTML = '';
@@ -383,10 +397,13 @@ async function runFlow() {
 
     // ── Populate title elements now that the flow has actually started ──
     const title = flow.title || '';
-    document.getElementById('topBarTitle').textContent   = title;
-    document.getElementById('topBarSub').textContent     = 'סוכן מקורות · פעיל';
+    typeText(document.getElementById('topBarTitle'), title);
+    document.getElementById('topBarSub').textContent = 'סוכן מקורות · פעיל';
     const navLabel = document.getElementById('navActiveLabel');
-    if (navLabel) navLabel.textContent = title;
+    if (navLabel) {
+        requestAnimationFrame(() => requestAnimationFrame(() => navLabel.classList.add('visible')));
+        typeText(navLabel, title);
+    }
 
     msgs.innerHTML = '';   // clear loading indicator
     await playSteps(flow.steps);
@@ -460,4 +477,3 @@ async function sendMessage() {
    Boot  — show idle state, wait for user input
 ───────────────────────────────────────────── */
 showIdleState();
- 
