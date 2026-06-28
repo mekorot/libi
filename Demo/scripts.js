@@ -4,8 +4,10 @@
 const FLOW_URL = 'flow.json';
 
 // Each user-triggered step in the flow requires typing this exact phrase.
-const START_PHRASE   = 'היי ליבי, אני רוצה להתחיל בבקשה ביקורת בנושא קליטת עובדים חדשים בארגון. בביקורת אני מתכננת להתמקד בנושא נהלי החברה, כללי הרגולציה והחוקים השונים.';
-const CONFIRM_PHRASE = 'תבדקי איך החברה מיישמת האמור לעיל במסגרת הליך גיוס עובדים, פרסום משרות והליך קליטה. לסיכום הציגי דוח ביניים בפורמט וורד לפיהנהוג בחברה.';
+const START_PHRASE = 'היי ליבי, אני רוצה להתחיל בבקשה ביקורת בנושא קליטת עובדים חדשים בארגון. בביקורת אני מתכננת להתמקד בנושא נהלי החברה, כללי הרגולציה והחוקים השונים.';
+// ⚠️ Must match flow.json byte-for-byte. Kept as a fallback —
+// the live value is read from the step itself (step.text) at runtime.
+const CONFIRM_PHRASE = 'תבדקי איך החברה מיישמת האמור לעיל במסגרת הליך גיוס עובדים, פרסום משרות והליך קליטה. לסיכום הציגי דוח מסכם בפורמט וורד לפי הנהוג בחברה.';
 
 /* ─────────────────────────────────────────────
    Utilities
@@ -18,9 +20,6 @@ function esc(t) {
 
 /**
  * Typing animation — writes `text` character-by-character into `el`.
- * @param {HTMLElement} el   - Target element
- * @param {string}      text - Text to type
- * @param {number}      [speed=55] - Ms per character
  */
 async function typeText(el, text, speed = 55) {
     el.textContent = '';
@@ -31,9 +30,7 @@ async function typeText(el, text, speed = 55) {
 }
 
 /* ─────────────────────────────────────────────
-   Document download  — fetch → blob so the
-   browser always triggers a Save dialog and
-   a missing file shows a Hebrew error toast.
+   Document download
 ───────────────────────────────────────────── */
 function downloadDoc(fname, src) {
     fetch(src)
@@ -43,8 +40,8 @@ function downloadDoc(fname, src) {
         })
         .then(blob => {
             const url = URL.createObjectURL(blob);
-            const a   = document.createElement('a');
-            a.href     = url;
+            const a = document.createElement('a');
+            a.href = url;
             a.download = fname;
             document.body.appendChild(a);
             a.click();
@@ -52,14 +49,12 @@ function downloadDoc(fname, src) {
             setTimeout(() => URL.revokeObjectURL(url), 10000);
         })
         .catch(() => {
-            // fetch failed (e.g. file:// protocol or network error) —
-            // fall back to a direct anchor download before giving up.
             try {
-                const a   = document.createElement('a');
-                a.href     = src;
+                const a = document.createElement('a');
+                a.href = src;
                 a.download = fname;
-                a.target   = '_blank';
-                a.rel      = 'noopener';
+                a.target = '_blank';
+                a.rel = 'noopener';
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -67,7 +62,7 @@ function downloadDoc(fname, src) {
                 showDocToast(`הקובץ "${fname}" אינו זמין כרגע. ודא שהקובץ נמצא בתיקיית הפרויקט.`);
             }
         });
-    return false;   // prevent default <a> navigation
+    return false;
 }
 
 function showDocToast(msg) {
@@ -97,9 +92,9 @@ function renderText(raw) {
     </svg>`;
 
     const DOCX_FILE_MAP = {
-        'InterimReport.docx':  'InterimReport.docx',
-        'SummeryReport.docx':  'SummeryReport.docx',
-        'summeryReport.docx':  'SummeryReport.docx'   // flow.json uses lowercase-s variant
+        'InterimReport.docx': 'InterimReport.docx',
+        'SummeryReport.docx': 'SummeryReport.docx',
+        'summeryReport.docx': 'SummeryReport.docx'
     };
 
     return raw
@@ -244,11 +239,11 @@ function iconSvg(name) {
 ───────────────────────────────────────────── */
 async function runToolBlock(toolEl, tool) {
     const statusEl = toolEl.querySelector('.tool-status');
-    const barEl    = toolEl.querySelector('.progress-bar');
-    const durEl    = toolEl.querySelector('.tool-dur');
+    const barEl = toolEl.querySelector('.progress-bar');
+    const durEl = toolEl.querySelector('.tool-dur');
 
     statusEl.textContent = 'מעבד...';
-    statusEl.className   = 'tool-status running';
+    statusEl.className = 'tool-status running';
 
     if (barEl) {
         barEl.style.transition = `width ${tool.ms}ms linear`;
@@ -258,7 +253,7 @@ async function runToolBlock(toolEl, tool) {
     await sleep(tool.ms);
 
     statusEl.textContent = 'הושלם';
-    statusEl.className   = 'tool-status done';
+    statusEl.className = 'tool-status done';
     if (durEl) durEl.textContent = (tool.ms / 1000).toFixed(1) + 'ש';
 }
 
@@ -356,13 +351,13 @@ async function playUserMessage(msg) {
 /* ─────────────────────────────────────────────
    Flow state
 ───────────────────────────────────────────── */
-let running        = false;
-let flowStarted    = false;  // true once the flow has been kicked off
-let waitingForUser = false;  // true while paused at the mid-flow gate
-let remainingSteps = [];     // steps queued after the mid-flow gate
+let running = false;
+let flowStarted = false;
+let waitingForUser = false;
+let remainingSteps = [];
 
 /* ─────────────────────────────────────────────
-   Step player  — shared by runFlow + resume
+   Step player — shared by runFlow + resume
 ───────────────────────────────────────────── */
 async function playSteps(steps) {
     running = true;
@@ -370,12 +365,22 @@ async function playSteps(steps) {
     for (let i = 0; i < steps.length; i++) {
         const step = steps[i];
 
-        // ── GATE: pause before the scripted confirmation message ──
-        if (step.type === 'user' && step.text === CONFIRM_PHRASE) {
-            remainingSteps = steps.slice(i + 1);   // skip the scripted user step
+        // ── GATE: pause before the user-confirmation step ──
+        // Primary trigger: explicit { "gate": "confirm" } marker in flow.json
+        // Fallback:        exact-text match against CONFIRM_PHRASE
+        const isConfirmGate =
+            step.type === 'user' &&
+            (step.gate === 'confirm' || step.text === CONFIRM_PHRASE);
+
+        if (isConfirmGate) {
+            // Store the live phrase so sendMessage + showNudge use the
+            // exact text from flow.json (single source of truth).
+            window.__confirmPhrase = step.text || CONFIRM_PHRASE;
+            remainingSteps = steps.slice(i + 1);
             waitingForUser = true;
-            running        = false;
-            return;                                // halt — resumed by sendMessage()
+            running = false;
+            console.debug('[flow] ⏸ paused at confirm gate (step #' + i + ')');
+            return;
         }
 
         if (step.type === 'user') await playUserMessage(step);
@@ -388,15 +393,15 @@ async function playSteps(steps) {
 }
 
 /* ─────────────────────────────────────────────
-   Flow runner  — fetches flow.json each time
+   Flow runner
 ───────────────────────────────────────────── */
 async function runFlow() {
     if (running) return;
 
-    // Full reset
     waitingForUser = false;
     remainingSteps = [];
-    flowStarted    = true;
+    flowStarted = true;
+    window.__confirmPhrase = null;
 
     const msgs = document.getElementById('messages');
     msgs.innerHTML = '';
@@ -413,22 +418,21 @@ async function runFlow() {
         return;
     }
 
-    // ── Populate title elements now that the flow has actually started ──
     const title = flow.title || '';
     typeText(document.getElementById('topBarTitle'), title);
-    document.getElementById('topBarSub').textContent     = 'סוכן מקורות · פעיל';
+    document.getElementById('topBarSub').textContent = 'סוכן מקורות · פעיל';
     const navLabel = document.getElementById('navActiveLabel');
     if (navLabel) {
         requestAnimationFrame(() => requestAnimationFrame(() => navLabel.classList.add('visible')));
         typeText(navLabel, title);
     }
 
-    msgs.innerHTML = '';   // clear loading indicator
+    msgs.innerHTML = '';
     await playSteps(flow.steps);
 }
 
 /* ─────────────────────────────────────────────
-   Idle state  — shown before the flow starts
+   Idle state
 ───────────────────────────────────────────── */
 function showIdleState() {
     document.getElementById('messages').innerHTML = `
@@ -475,13 +479,14 @@ async function sendMessage() {
 
     // ── Gate 2: paused at mid-flow confirmation ──
     if (waitingForUser) {
-        if (val === CONFIRM_PHRASE) {
+        const expected = window.__confirmPhrase || CONFIRM_PHRASE;
+        if (val === expected) {
             waitingForUser = false;
             await playUserMessage({ text: val });
             await playSteps(remainingSteps);
         } else {
             playUserMessage({ text: val });
-            setTimeout(() => showNudge(CONFIRM_PHRASE), 400);
+            setTimeout(() => showNudge(expected), 400);
         }
         return;
     }
@@ -492,7 +497,6 @@ async function sendMessage() {
 }
 
 /* ─────────────────────────────────────────────
-   Boot  — show idle state, wait for user input
+   Boot
 ───────────────────────────────────────────── */
 showIdleState();
- 
